@@ -248,6 +248,84 @@ input,select,textarea{font:inherit;color:inherit}
   transition:height .3s ease-in-out}
 .bars .bl{font-size:10px;color:var(--ink3)}
 .dash-list .drow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #F1F2F5;font-size:13px}
+
+/* ===== Dashboard v2 ===== */
+.dash{height:100%;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+.dash-grid{margin-bottom:14px;align-items:start}
+.dash-row2{grid-template-columns:2fr 1fr}
+.widget.wide{grid-column:span 2;min-width:0}
+.widget.wide3{grid-column:1/-1;min-width:0}
+.wt-flex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wt-legend{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:10.5px;
+  font-weight:600;color:var(--ink3);text-transform:none;letter-spacing:0}
+.wt-legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-left:5px}
+.wt-legend i.sq{border-radius:3px}
+
+/* Donut + rincian prioritas */
+.pri-legend{margin-top:12px;display:flex;flex-direction:column;gap:1px}
+.pri-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px}
+.pri-sw{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
+.pri-lbl{flex:1;color:var(--ink2)}
+.pri-n{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+
+/* Kartu daftar task */
+.dl-big{font-size:30px;font-weight:800;line-height:1.1;margin:4px 0 10px;
+  font-variant-numeric:tabular-nums}
+.dl-row{display:flex;align-items:center;gap:8px;padding:8px 0;width:100%;
+  text-align:left;background:none;border-bottom:1px solid #F1F2F5;font-size:13px;
+  cursor:pointer;color:var(--ink)}
+.dash-list .dl-row:last-of-type{border-bottom:none}
+.dl-row:hover{opacity:.72}
+.dl-dot{width:5px;height:5px;border-radius:50%;background:var(--ink3);flex:0 0 5px}
+.dl-ttl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl-flag{width:6px;height:11px;border-radius:2px;flex:0 0 6px}
+.dl-date{font-size:11.5px;color:var(--ink3);white-space:nowrap;font-variant-numeric:tabular-nums}
+.dl-date.overdue{color:var(--red);font-weight:600}
+.dl-date.today{color:var(--blue);font-weight:600}
+.dl-more{font-size:12px;color:var(--blue);font-weight:600;padding:8px 0 0;
+  background:none;text-align:left;width:100%;cursor:pointer}
+.dl-more:hover{text-decoration:underline}
+
+/* Batang bertumpuk */
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  height:100%;gap:3px;min-width:0}
+.bn{font-size:10.5px;color:var(--ink3);font-weight:700;font-variant-numeric:tabular-nums}
+.bstack{width:100%;max-width:26px;display:flex;flex-direction:column-reverse;
+  border-radius:6px 6px 3px 3px;overflow:hidden;flex:1;justify-content:flex-start}
+.bseg{width:100%;min-height:3px}
+.b-empty{flex:1;display:flex;align-items:flex-end;justify-content:center;
+  color:var(--ink3);font-size:15px;padding-bottom:2px}
+.bl{font-size:10.5px;color:var(--ink3)}
+
+/* Heatmap meeting */
+.heatmap{margin-top:12px;display:flex;flex-direction:column;gap:4px;overflow-x:auto;
+  padding-bottom:2px}
+.hm-row{display:grid;grid-template-columns:44px repeat(10,minmax(26px,1fr));
+  gap:4px;align-items:center}
+.hm-lbl{font-size:10.5px;color:var(--ink3);text-align:right;padding-right:2px;
+  font-variant-numeric:tabular-nums}
+.hm-dow,.hm-date{font-size:10.5px;color:var(--ink3);text-align:center;
+  font-variant-numeric:tabular-nums}
+.hm-dow.now,.hm-date.now{color:var(--blue);font-weight:700}
+.hm-cell{height:22px;border-radius:5px;background:#EAECF0;transition:transform var(--tr)}
+.hm-cell.on{background:var(--green)}
+.hm-cell:hover{transform:scale(1.12)}
+.heat-note{margin-top:10px;font-size:11px;color:var(--ink3);line-height:1.5}
+
+:root[data-theme="dark"] .dl-row{border-bottom-color:#2E333D}
+:root[data-theme="dark"] .hm-cell{background:#2E333D}
+:root[data-theme="dark"] .donut .hole{background:#22262E}
+
+@media (max-width:860px){
+  .dash-row2{grid-template-columns:1fr}
+  .widget.wide{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .dash{padding:12px}
+  .hm-row{grid-template-columns:38px repeat(10,minmax(22px,1fr));gap:3px}
+  .hm-cell{height:19px}
+  .dl-big{font-size:26px}
+}
 .dash-list .drow:last-child{border-bottom:0}
 
 /* ===== Calendar ===== */
@@ -255,6 +333,69 @@ input,select,textarea{font:inherit;color:inherit}
 .cal-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .cal-head b{font-size:16px}
 .cal-nav{width:30px;height:30px;border-radius:9px;background:#fff;box-shadow:var(--sh);font-size:13px}
+
+/* ===== Kalender: switcher mode ===== */
+.cal-head .flex1{flex:1}
+.cal-seg{display:flex;background:#EFF1F4;border-radius:9px;padding:2px;gap:2px}
+.cal-seg button{font-size:12px;font-weight:600;padding:5px 11px;border-radius:7px;color:var(--ink2)}
+.cal-seg button.on{background:#fff;color:var(--blue);box-shadow:0 1px 2px rgba(0,0,0,.09)}
+
+/* ===== Kalender: mode hari (skala jam) ===== */
+.caldays{overflow:hidden}
+.cd-headrow{display:grid;grid-template-columns:46px repeat(var(--cd-cols),1fr);gap:1px;
+  padding-bottom:6px;flex:0 0 auto}
+.cd-dayhead{text-align:center;padding:4px 0;border-radius:8px}
+.cd-dayhead .dw{display:block;font-size:10.5px;color:var(--ink3);letter-spacing:.4px}
+.cd-dayhead b{font-size:17px;font-variant-numeric:tabular-nums}
+.cd-dayhead.today{background:rgba(59,130,246,.12)}
+.cd-dayhead.today b,.cd-dayhead.today .dw{color:var(--blue)}
+.cd-allday{display:grid;grid-template-columns:46px repeat(var(--cd-cols),1fr);gap:1px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:5px 0;flex:0 0 auto;max-height:84px;overflow-y:auto}
+.cd-adlbl{font-size:9.5px;color:var(--ink3);text-align:right;padding-right:5px;line-height:1.25}
+.cd-adcol{display:flex;flex-direction:column;gap:3px;min-height:22px;padding:0 2px;border-radius:6px}
+.cd-adcol.dragover{background:rgba(59,130,246,.14);outline:1.5px dashed var(--blue)}
+.cd-chip{font-size:11px;padding:3px 6px;border-radius:6px;background:color-mix(in srgb,var(--tc) 16%,#fff);
+  color:var(--tc);font-weight:600;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative}
+.cd-body{display:grid;grid-template-columns:46px repeat(var(--cd-cols),1fr);gap:1px;position:relative}
+.cd-hours{position:relative}
+.cd-hr{position:relative;border-top:1px solid transparent}
+.cd-hr span{position:absolute;top:-7px;right:6px;font-size:10.5px;color:var(--ink3);
+  background:var(--paper);padding:0 2px;font-variant-numeric:tabular-nums}
+.cd-col{position:relative;background:#fff;border-radius:8px;overflow:hidden}
+.cd-dim{position:absolute;left:0;right:0;background:rgba(0,0,0,.045);pointer-events:none;z-index:0}
+.cd-slot{position:relative;border-top:1px solid #F1F2F5;z-index:1}
+.cd-slot:hover{background:rgba(59,130,246,.05)}
+.cd-slot.dragover{background:rgba(59,130,246,.16);outline:1.5px dashed var(--blue);outline-offset:-2px}
+.cd-now{position:absolute;left:0;right:0;height:2px;background:var(--red);z-index:4;pointer-events:none}
+.cd-now::before{content:'';position:absolute;left:-1px;top:-3px;width:8px;height:8px;
+  border-radius:50%;background:var(--red)}
+.cd-block{position:absolute;left:3px;right:3px;min-height:26px;padding:4px 6px;border-radius:7px;
+  background:color-mix(in srgb,var(--tc) 17%,#fff);border-left:3px solid var(--tc);
+  font-size:11.5px;line-height:1.35;color:var(--ink);cursor:pointer;z-index:3;
+  overflow:hidden;text-overflow:ellipsis}
+.cd-block b{color:var(--tc);font-variant-numeric:tabular-nums}
+.cd-block:hover{filter:brightness(.97)}
+.cal-cell.dragover{background:rgba(59,130,246,.14);outline:1.5px dashed var(--blue);outline-offset:-2px}
+
+:root[data-theme="dark"] .cd-col{background:#22262E}
+:root[data-theme="dark"] .cd-dim{background:rgba(0,0,0,.28)}
+:root[data-theme="dark"] .cd-slot{border-top-color:#2A2F38}
+:root[data-theme="dark"] .cd-hr span{background:var(--paper)}
+:root[data-theme="dark"] .cal-seg{background:#2E333D}
+:root[data-theme="dark"] .cal-seg button.on{background:#3A404B;color:#7FB2F5}
+:root[data-theme="dark"] .cd-chip{background:color-mix(in srgb,var(--tc) 26%,#22262E)}
+:root[data-theme="dark"] .cd-block{background:color-mix(in srgb,var(--tc) 26%,#22262E)}
+
+@media (max-width:640px){
+  .calwrap{padding:10px}
+  .cd-headrow,.cd-allday,.cd-body{grid-template-columns:38px repeat(var(--cd-cols),1fr)}
+  .cd-dayhead b{font-size:15px}
+  .cd-block{font-size:10.5px;padding:3px 5px}
+  .cal-seg button{padding:5px 9px;font-size:11.5px}
+  .cal-head{flex-wrap:wrap;gap:7px}
+}
 .cal-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(84px,1fr);
   gap:6px;overflow-y:auto}
 .cal-dow{font-size:11px;font-weight:700;color:var(--ink3);text-align:center;padding:4px 0;text-transform:uppercase}
@@ -324,6 +465,9 @@ input,select,textarea{font:inherit;color:inherit}
   .board{scroll-snap-type:x mandatory;padding:12px;gap:10px}
   .kcol{width:calc(100vw - 44px);flex:0 0 calc(100vw - 44px);scroll-snap-align:center}
   #content{padding-bottom:56px}
+  /* Ruang ekstra di bawah supaya baris terakhir (Keluar & versi) tidak
+     tertutup tab bar maupun home indicator iPhone. */
+  .setwrap{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
   .split .calside{display:none}
   .eiwrap{grid-template-columns:1fr;grid-template-rows:none;grid-auto-rows:minmax(180px,auto)}
   .modal{width:100%;max-height:94dvh;border-radius:16px 16px 0 0;align-self:flex-end}
@@ -504,7 +648,12 @@ input,select,textarea{font:inherit;color:inherit}
 .sb-addbtn.on{background:var(--blue);color:#fff}
 
 /* ================= Halaman Setting ================= */
-.setwrap{max-width:640px;margin:0 auto;padding:4px 2px 40px}
+/* #content memakai overflow:hidden karena view papan mengatur scroll-nya
+   sendiri. Halaman Setting adalah blok panjang biasa, jadi ia harus
+   menyediakan scroll-nya sendiri — kalau tidak, isinya terpotong. */
+.setwrap{max-width:640px;margin:0 auto;padding:4px 14px 48px;
+  height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain}
 .set-head{display:flex;align-items:center;gap:8px;padding:4px 2px 14px}
 .set-head b{font-size:19px;letter-spacing:-.01em}
 .set-back{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;
@@ -870,7 +1019,7 @@ const GROUP_ICON_SET = ['trophy','briefcase','home','target','star','rocket','bo
    Jangan pakai toISOString(): itu UTC dan bisa menggeser tanggal. */
 const ymd = (d) => { d = (d instanceof Date) ? d : new Date(d);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-const APP_VERSION = '2.2';
+const APP_VERSION = '2.3';
 const todayISO = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const addDays = (iso,n) => { const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
@@ -2182,46 +2331,239 @@ function fDelete(){ const id=fEditId; closeFolderModal(); delFolder(id); }
 function closeFolderModal(){ const ov=document.getElementById('overlay'); if(ov) ov.remove(); fEditId=null; render(); }
 
 /* ---------- Dashboard ---------- */
+/* ================= DASHBOARD ================= */
+
+const PRI_COLOR = { high:'var(--red)', medium:'var(--orange)', low:'var(--blue)', none:'var(--ink3)' };
+const PRI_ORDER = ['high','medium','low','none'];
+function priOf(t){ const p=(t&&t.priority)||'none'; return PRI_COLOR[p]?p:'none'; }
+
+/* Kartu daftar: angka besar + bullet + judul + bendera prioritas + tanggal.
+   Bendera hanya warna, tanpa teks high/medium/low. */
+const DASH_LIST_MAX = 4;
+function dashListCard(title, tasks, bigColor, emptyMsg, smartKey){
+  const n = tasks.length;
+  const shown = tasks.slice(0, DASH_LIST_MAX);
+  const rest  = n - shown.length;
+  const rows = shown.map(t=>`
+    <button class="dl-row" onclick="openModal('${t.id}')">
+      <span class="dl-dot"></span>
+      <span class="dl-ttl">${esc(t.title)}</span>
+      <span class="dl-flag" style="background:${PRI_COLOR[priOf(t)]}"
+        title="Prioritas: ${priOf(t)}"></span>
+      <span class="dl-date ${t.due?dateClass(t.due):''}">${t.due?fmtDate(t.due):'—'}</span>
+    </button>`).join('');
+  return `<div class="widget dash-list">
+    <div class="wt">${title}</div>
+    <div class="dl-big" style="color:${bigColor}">${n}</div>
+    ${n ? rows : `<div class="empty">${emptyMsg}</div>`}
+    ${rest>0 ? `<button class="dl-more" onclick="goSmart('${smartKey}')">+${rest} lagi…</button>` : ''}
+  </div>`;
+}
+
 function renderDash(el){
-  const ts=visibleTasks(); const td=todayISO();
-  const done=ts.filter(t=>t.done).length, total=ts.length;
-  const pct=total?Math.round(done/total*100):0;
-  const over=ts.filter(t=>t.due&&t.due<td&&!t.done).length;
-  const dueToday=ts.filter(t=>t.due===td&&!t.done).length;
-  // weekly bars: tasks due per day next 7 days
-  let bars='';
-  for(let i=0;i<7;i++){ const d=addDays(td,i);
-    const n=ts.filter(t=>t.due===d).length;
-    const h=Math.min(100, n*22+3);
-    const dt=new Date(d+'T00:00:00');
-    bars+=`<div class="b"><div class="bar" style="height:${h}%;${i===0?'background:var(--green)':''}"></div>
-      <div class="bl">${DOW[dt.getDay()]}</div></div>`; }
-  const next=sortTasks(ts.filter(t=>!t.done&&t.due),'due-asc').slice(0,6);
-  el.innerHTML=`<div class="dash"><div class="dash-grid">
-    <div class="widget"><div class="wt">Task Completed</div>
-      <div class="donut" style="background:conic-gradient(var(--green) ${pct*3.6}deg,#EAECF0 0)">
-        <div class="hole">${pct}%<span>${done}/${total}</span></div></div>
-      <div class="sub" style="text-align:center">tasks completed</div></div>
-    <div class="widget"><div class="wt">Overdue</div><div class="big" style="color:var(--red)">${over}</div>
-      <div class="sub">overdue</div></div>
-    <div class="widget"><div class="wt">Due Today</div><div class="big" style="color:var(--blue)">${dueToday}</div>
-      <div class="sub">due today</div></div>
-    <div class="widget" style="grid-column:span 2;min-width:0"><div class="wt">Next 7 Days Load</div>
-      <div class="bars">${bars}</div></div>
-    <div class="widget dash-list" style="min-width:0"><div class="wt">Up Next</div>
-      ${next.length?next.map(t=>`<div class="drow">
-        <span style="width:8px;height:8px;border-radius:50%;background:${folderOf(t.folderId).color};flex:0 0 8px"></span>
-        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.title)}</span>
-        <span class="chip cdate ${dateClass(t.due)}">${fmtDate(t.due)}</span></div>`).join('')
-      :'<div class="empty">No tasks with due dates</div>'}</div>
-  </div></div>`;
+  const ts = visibleTasks();
+  const td = todayISO();
+
+  /* ---- 1.1 Task Completed: donut disegmentasi per prioritas ---- */
+  const doneTasks = ts.filter(t=>t.done);
+  const total = ts.length, done = doneTasks.length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  const byPri = {high:0,medium:0,low:0,none:0};
+  doneTasks.forEach(t=>{ byPri[priOf(t)]++; });
+
+  // Bangun conic-gradient: tiap prioritas mengisi porsinya sendiri.
+  let acc = 0; const stops = [];
+  for(const p of PRI_ORDER){
+    if(!byPri[p]) continue;
+    const deg = total ? (byPri[p]/total)*360 : 0;
+    stops.push(`${PRI_COLOR[p]} ${acc.toFixed(2)}deg ${(acc+deg).toFixed(2)}deg`);
+    acc += deg;
+  }
+  stops.push(`#EAECF0 ${acc.toFixed(2)}deg 360deg`);
+  const donutBg = `conic-gradient(${stops.join(',')})`;
+  const priRows = PRI_ORDER.filter(p=>p!=='none' || byPri.none>0).map(p=>`
+    <div class="pri-row">
+      <span class="pri-sw" style="background:${PRI_COLOR[p]}"></span>
+      <span class="pri-lbl">${p==='none'?'Tanpa prioritas':(PRI[p]?PRI[p].lbl:p)}</span>
+      <span class="pri-n">${byPri[p]}</span>
+    </div>`).join('');
+
+  /* ---- 1.2 Overdue / Due Today / Up Next ---- */
+  const overdue  = sortTasks(ts.filter(t=>t.due && t.due<td && !t.done), 'due-asc');
+  const dueToday = sortTasks(ts.filter(t=>t.due===td && !t.done), 'due-asc');
+  const upNext   = sortTasks(ts.filter(t=>!t.done && t.due && t.due>td), 'due-asc');
+
+  /* ---- 1.3 Next 7 Days Load: stacked bar per prioritas ---- */
+  let maxDay = 1;
+  const days = [];
+  for(let i=0;i<7;i++){
+    const d = addDays(td,i);
+    const dayTasks = ts.filter(t=>t.due===d && !t.done);
+    const counts = {high:0,medium:0,low:0,none:0};
+    dayTasks.forEach(t=>counts[priOf(t)]++);
+    maxDay = Math.max(maxDay, dayTasks.length);
+    days.push({iso:d, n:dayTasks.length, counts, dow:DOW[new Date(d+'T00:00:00').getDay()]});
+  }
+  const bars = days.map(d=>{
+    if(!d.n) return `<div class="b"><div class="b-empty">·</div><div class="bl">${d.dow}</div></div>`;
+    const segs = PRI_ORDER.filter(p=>d.counts[p]).map(p=>{
+      const hPct = (d.counts[p]/maxDay)*100;
+      return `<div class="bseg" style="height:${hPct}%;background:${PRI_COLOR[p]}"
+        title="${d.counts[p]} ${p}"></div>`;
+    }).join('');
+    return `<div class="b"><div class="bn">${d.n}</div>
+      <div class="bstack">${segs}</div><div class="bl">${d.dow}</div></div>`;
+  }).join('');
+
+  /* ---- 1.4 Meeting Load: 2 minggu hari kerja x 4 slot ---- */
+  const heat = meetingHeatmap(ts);
+
+  el.innerHTML = `<div class="dash">
+    <div class="dash-grid">
+      <div class="widget">
+        <div class="wt">Task Completed</div>
+        <div class="donut" style="background:${donutBg}">
+          <div class="hole">${pct}%<span>${done}/${total}</span></div>
+        </div>
+        <div class="pri-legend">${priRows}</div>
+      </div>
+      ${dashListCard('Overdue',   overdue,  'var(--red)',   'Tidak ada yang terlewat', 'all')}
+      ${dashListCard('Due Today', dueToday, 'var(--blue)',  'Tidak ada jatuh tempo hari ini', 'today')}
+    </div>
+
+    <div class="dash-grid dash-row2">
+      <div class="widget wide">
+        <div class="wt wt-flex">Next 7 Days Load
+          <span class="wt-legend">
+            <i style="background:var(--red)"></i>High
+            <i style="background:var(--orange)"></i>Med
+            <i style="background:var(--blue)"></i>Low
+          </span>
+        </div>
+        <div class="bars">${bars}</div>
+      </div>
+      ${dashListCard('Up Next', upNext, 'var(--green)', 'Belum ada jadwal berikutnya', 'next7')}
+    </div>
+
+    <div class="dash-grid">
+      <div class="widget wide3">
+        <div class="wt wt-flex">Meeting Load · 2 Minggu
+          <span class="wt-legend">
+            <i class="sq" style="background:#EAECF0"></i>kosong
+            <i class="sq" style="background:var(--green)"></i>meeting
+          </span>
+        </div>
+        ${heat.html}
+        <div class="heat-note">Dari task bertag <b>#meeting</b> · slot dari jam pada task${heat.noTime?` · <b>${heat.noTime}</b> tanpa jam`:''}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- Heatmap meeting ----------
+   Sumber: task bertag #meeting. Slot ditentukan dari field time.
+   Rentang: 2 minggu hari kerja (Sen-Jum x2), 10 kolom.
+   Warna: 2 saja (ada / tidak ada meeting). */
+function meetingSlots(){
+  const w = workHours();          // dari halaman Setting
+  // Empat slot membagi jam kerja; slot terakhir dipanjangkan sampai akhir hari
+  // supaya meeting sore tidak hilang dari peta.
+  return [
+    {key:'s1', label:'07–10', from:w.start,      to:10},
+    {key:'s2', label:'10–12', from:10,           to:12},
+    {key:'s3', label:'13–15', from:13,           to:15},
+    {key:'s4', label:'15–'+String(Math.max(18,w.end)).padStart(2,'0'),
+     from:15,  to:24}
+  ];
+}
+/* 10 hari kerja: mulai Senin minggu ini. */
+function workdaysTwoWeeks(){
+  const now = new Date();
+  const dow = now.getDay();                 // 0=Minggu
+  const back = (dow===0) ? 6 : dow-1;       // mundur ke Senin
+  const monday = addDays(ymd(now), -back);
+  const out=[];
+  for(let wk=0; wk<2; wk++){
+    for(let i=0;i<5;i++){
+      const iso = addDays(monday, wk*7+i);
+      out.push({iso, dow:DOW[new Date(iso+'T00:00:00').getDay()], day:+iso.slice(8,10)});
+    }
+  }
+  return out;
+}
+function meetingHeatmap(ts){
+  const slots = meetingSlots();
+  const days  = workdaysTwoWeeks();
+  const meetings = ts.filter(t=>(t.tags||[]).some(x=>String(x).toLowerCase()==='meeting'));
+  const noTime = meetings.filter(t=>t.due && !t.time).length;
+
+  const grid = {};
+  for(const t of meetings){
+    if(!t.due || !t.time) continue;
+    const hh = parseInt(String(t.time).slice(0,2),10);
+    if(!Number.isFinite(hh)) continue;
+    const slot = slots.find(sl=> hh>=sl.from && hh<sl.to);
+    if(!slot) continue;                      // mis. jam istirahat 12-13
+    grid[t.due+'|'+slot.key] = (grid[t.due+'|'+slot.key]||0) + 1;
+  }
+
+  const td = todayISO();
+  const head = days.map(d=>`<div class="hm-dow ${d.iso===td?'now':''}">${d.dow}</div>`).join('');
+  const foot = days.map(d=>`<div class="hm-date ${d.iso===td?'now':''}">${d.day}</div>`).join('');
+  const rows = slots.map(sl=>`
+    <div class="hm-row">
+      <div class="hm-lbl">${sl.label}</div>
+      ${days.map(d=>{
+        const n = grid[d.iso+'|'+sl.key]||0;
+        return `<div class="hm-cell ${n?'on':''}" title="${d.iso} ${sl.label}${n?` · ${n} meeting`:' · kosong'}"></div>`;
+      }).join('')}
+    </div>`).join('');
+
+  return { noTime, html:`
+    <div class="heatmap">
+      <div class="hm-row hm-head"><div class="hm-lbl"></div>${head}</div>
+      ${rows}
+      <div class="hm-row hm-foot"><div class="hm-lbl"></div>${foot}</div>
+    </div>` };
 }
 
 /* ---------- Calendar ---------- */
 function calYM(){ if(!S.ui.calYM){ const d=new Date(); S.ui.calYM=[d.getFullYear(),d.getMonth()]; } return S.ui.calYM; }
 function calNav(n){ let [y,m]=calYM(); m+=n; if(m<0){m=11;y--;} if(m>11){m=0;y++;}
   S.ui.calYM=[y,m]; save(); render(); }
-function renderCalendar(el,compact){
+/* ---------- Mode kalender: 'days' (skala jam) | 'month' ---------- */
+function calMode(){ return S.ui.calMode==='days' ? 'days' : 'month'; }
+function setCalMode(m){ S.ui.calMode=m; save(); render(); }
+
+/* Tanggal jangkar untuk tampilan berbasis hari. */
+function calAnchor(){
+  if(!S.ui.calAnchor) S.ui.calAnchor = todayISO();
+  return S.ui.calAnchor;
+}
+function calDaysNav(n){
+  const step = calDayCount();
+  S.ui.calAnchor = addDays(calAnchor(), n*step);
+  save(); render();
+}
+/* 3 hari di layar penuh, 1 hari di split pane (ruangnya sempit). */
+let __calCompact = false;
+function calDayCount(){ return __calCompact ? 1 : 3; }
+
+/* Rentang jam yang ditampilkan: selalu memuat jam kerja, plus margin. */
+function calHourRange(){
+  const w = workHours();
+  return { from: Math.max(0, Math.min(6, w.start-1)), to: Math.min(24, Math.max(19, w.end+2)) };
+}
+const CAL_PX_PER_HOUR = 46;
+
+function renderCalendar(el, compact){
+  __calCompact = !!compact;
+  if(calMode()==='days') return renderCalDays(el, compact);
+  return renderCalMonth(el, compact);
+}
+
+/* ================= Mode BULAN (grid 6x7) ================= */
+function renderCalMonth(el, compact){
   const [y,m]=calYM(); const td=todayISO();
   const first=new Date(y,m,1); const startDow=first.getDay();
   const start=addDays(y+'-'+String(m+1).padStart(2,'0')+'-01',-startDow);
@@ -2233,34 +2575,221 @@ function renderCalendar(el,compact){
     const dm=+iso.slice(5,7)-1;
     const dayTasks=ts.filter(t=>t.due===iso);
     const shown=dayTasks.slice(0,compact?2:3);
-    cells+=`<div class="cal-cell ${dm!==m?'dim':''} ${iso===td?'today':''}" onclick="calDay('${iso}')">
+    cells+=`<div class="cal-cell ${dm!==m?'dim':''} ${iso===td?'today':''}"
+      onclick="calDay('${iso}')"
+      ondragover="calDragOver(event)" ondragleave="calDragLeave(event)"
+      ondrop="calDropDay(event,'${iso}')">
       <div class="dnum">${+iso.slice(8,10)}</div>
-      ${shown.map(t=>`<div class="cal-task" style="--tc:${folderOf(t.folderId).color};
+      ${shown.map(t=>`<div class="cal-task" draggable="true"
+        ondragstart="calDragStart(event,'${t.id}')"
+        style="--tc:${folderOf(t.folderId).color};
         ${t.done?'text-decoration:line-through;opacity:.55':''}">${esc(t.title)}</div>`).join('')}
       ${dayTasks.length>shown.length?`<div class="cal-more">+${dayTasks.length-shown.length} lagi</div>`:''}
     </div>`;
   }
   el.innerHTML=`<div class="calwrap">
-    <div class="cal-head"><button class="cal-nav" onclick="calNav(-1)">${ic('chevLeft',16)}</button>
-      <b>${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</b>
-      <button class="cal-nav" onclick="calNav(1)">${ic('chevRight',16)}</button>
-      <button class="btn-ghost" onclick="S.ui.calYM=null;save();render()">Today</button></div>
+    ${calHeadHTML(['January','February','March','April','May','June','July','August','September','October','November','December'][m]+' '+y, compact)}
     <div class="cal-grid" style="grid-template-rows:auto repeat(6,minmax(${compact?'64':'84'}px,1fr))">${cells}</div>
   </div>`;
-  // Swipe left/right to change month (mobile). Left = next, Right = prev.
-  const cw=el.querySelector('.calwrap');
-  if(cw){
-    let sx=null, sy=null;
-    cw.addEventListener('touchstart',ev=>{ const t=ev.touches[0]; sx=t.clientX; sy=t.clientY; },{passive:true});
-    cw.addEventListener('touchend',ev=>{
-      if(sx===null) return;
-      const t=ev.changedTouches[0];
-      const dx=t.clientX-sx, dy=t.clientY-sy;
-      if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5){ calNav(dx<0?1:-1); }
-      sx=sy=null;
-    },{passive:true});
-  }
+  wireCalSwipe(el, n=>calNav(n));
 }
+
+/* ================= Mode HARI (skala jam) ================= */
+function renderCalDays(el, compact){
+  const td   = todayISO();
+  const n    = calDayCount();
+  const a0   = calAnchor();
+  const days = Array.from({length:n},(_,i)=>addDays(a0,i));
+  const ts   = visibleTasks();
+  const hr   = calHourRange();
+  const w    = workHours();
+  const hours = [];
+  for(let h=hr.from; h<hr.to; h++) hours.push(h);
+
+  const title = n===1
+    ? fmtDate(days[0])
+    : fmtDate(days[0]) + ' – ' + fmtDate(days[n-1]);
+
+  /* --- Baris "Sepanjang hari": task punya due tapi tanpa jam --- */
+  const allDay = days.map(d=>ts.filter(t=>t.due===d && !t.time));
+  const adaAllDay = allDay.some(list=>list.length);
+  const allDayRow = !adaAllDay ? '' : `
+    <div class="cd-allday">
+      <div class="cd-adlbl">Sepanjang<br>hari</div>
+      ${days.map((d,i)=>`
+        <div class="cd-adcol" ondragover="calDragOver(event)" ondragleave="calDragLeave(event)"
+          ondrop="calDropAllDay(event,'${d}')" onclick="calDay('${d}')">
+          ${allDay[i].map(t=>`<div class="cd-chip" draggable="true"
+            ondragstart="calDragStart(event,'${t.id}')"
+            onclick="event.stopPropagation();openModal('${t.id}')"
+            style="--tc:${folderOf(t.folderId).color};${t.done?'text-decoration:line-through;opacity:.55':''}"
+            title="${esc(t.title)}">${esc(t.title)}</div>`).join('')}
+        </div>`).join('')}
+    </div>`;
+
+  /* --- Kolom jam --- */
+  const gridH = hours.length*CAL_PX_PER_HOUR;
+  const hourLabels = hours.map(h=>`
+    <div class="cd-hr" style="height:${CAL_PX_PER_HOUR}px">
+      <span>${String(h).padStart(2,'0')}</span></div>`).join('');
+
+  const cols = days.map(d=>{
+    const timed = ts.filter(t=>t.due===d && t.time);
+    const blocks = timed.map(t=>{
+      const hh=parseInt(String(t.time).slice(0,2),10);
+      const mm=parseInt(String(t.time).slice(3,5),10)||0;
+      if(!Number.isFinite(hh)) return '';
+      const top=((hh-hr.from)+mm/60)*CAL_PX_PER_HOUR;
+      if(top<0 || top>gridH) return '';
+      const f=folderOf(t.folderId);
+      return `<div class="cd-block" draggable="true"
+        ondragstart="calDragStart(event,'${t.id}')"
+        onclick="event.stopPropagation();openModal('${t.id}')"
+        style="top:${top}px;--tc:${f.color};${t.done?'text-decoration:line-through;opacity:.6':''}"
+        title="${esc(t.time)} ${esc(t.title)}">
+        <b>${esc(t.time)}</b> ${esc(t.title)}</div>`;
+    }).join('');
+
+    // Zona luar jam kerja digelapkan
+    const dimTop = (w.start-hr.from)*CAL_PX_PER_HOUR;
+    const dimBotTop = (w.end-hr.from)*CAL_PX_PER_HOUR;
+    const dimBotH = Math.max(0, gridH-dimBotTop);
+
+    // Garis "sekarang"
+    let nowLine='';
+    if(d===td){
+      const now=new Date();
+      const cur=(now.getHours()-hr.from)+now.getMinutes()/60;
+      if(cur>=0 && cur<=hours.length){
+        nowLine=`<div class="cd-now" style="top:${cur*CAL_PX_PER_HOUR}px"></div>`;
+      }
+    }
+    const slots = hours.map(h=>`
+      <div class="cd-slot" style="height:${CAL_PX_PER_HOUR}px"
+        ondragover="calDragOver(event)" ondragleave="calDragLeave(event)"
+        ondrop="calDropSlot(event,'${d}',${h})"
+        onclick="calNewAt('${d}',${h})"></div>`).join('');
+
+    return `<div class="cd-col">
+      <div class="cd-dim" style="top:0;height:${dimTop}px"></div>
+      ${dimBotH>0?`<div class="cd-dim" style="top:${dimBotTop}px;height:${dimBotH}px"></div>`:''}
+      ${slots}${nowLine}${blocks}
+    </div>`;
+  }).join('');
+
+  const heads = days.map(d=>{
+    const dt=new Date(d+'T00:00:00');
+    return `<div class="cd-dayhead ${d===td?'today':''}">
+      <span class="dw">${DOW[dt.getDay()]}</span><b>${+d.slice(8,10)}</b></div>`;
+  }).join('');
+
+  el.innerHTML=`<div class="calwrap caldays" style="--cd-cols:${n}">
+    ${calHeadHTML(title, compact)}
+    <div class="cd-headrow"><div class="cd-adlbl"></div>${heads}</div>
+    ${allDayRow}
+    <div class="cd-scroll">
+      <div class="cd-body" style="height:${gridH}px">
+        <div class="cd-hours">${hourLabels}</div>
+        ${cols}
+      </div>
+    </div>
+  </div>`;
+
+  // Gulirkan otomatis ke awal jam kerja
+  const sc=el.querySelector('.cd-scroll');
+  if(sc) sc.scrollTop = Math.max(0,(w.start-hr.from)*CAL_PX_PER_HOUR - 8);
+  wireCalSwipe(el, n2=>calDaysNav(n2));
+}
+
+/* Header bersama: navigasi + switcher mode */
+function calHeadHTML(title, compact){
+  const m=calMode();
+  return `<div class="cal-head">
+    <button class="cal-nav" onclick="${m==='days'?'calDaysNav(-1)':'calNav(-1)'}">${ic('chevLeft',16)}</button>
+    <b>${esc(title)}</b>
+    <button class="cal-nav" onclick="${m==='days'?'calDaysNav(1)':'calNav(1)'}">${ic('chevRight',16)}</button>
+    <button class="btn-ghost" onclick="calToday()">Hari ini</button>
+    <span class="flex1"></span>
+    <div class="cal-seg">
+      <button class="${m==='days'?'on':''}" onclick="setCalMode('days')">${compact?'Hari':'3 Hari'}</button>
+      <button class="${m==='month'?'on':''}" onclick="setCalMode('month')">Bulan</button>
+    </div>
+  </div>`;
+}
+function calToday(){
+  S.ui.calYM=null; S.ui.calAnchor=todayISO(); save(); render();
+}
+function wireCalSwipe(el, nav){
+  const cw=el.querySelector('.calwrap');
+  if(!cw) return;
+  let sx=null, sy=null;
+  cw.addEventListener('touchstart',ev=>{ const t=ev.touches[0]; sx=t.clientX; sy=t.clientY; },{passive:true});
+  cw.addEventListener('touchend',ev=>{
+    if(sx===null) return;
+    const t=ev.changedTouches[0];
+    const dx=t.clientX-sx, dy=t.clientY-sy;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5){ nav(dx<0?1:-1); }
+    sx=sy=null;
+  },{passive:true});
+}
+
+/* ---------- Drag & drop kalender ----------
+   Di HP, drag sentuh sering bentrok dengan scroll. HTML5 drag hanya aktif
+   dengan mouse, jadi di HP pengguna memakai tap -> modal untuk mengubah
+   tanggal/jam. Ini pilihan sadar, bukan kelalaian. */
+let __calDragId=null;
+function calDragStart(ev,id){
+  __calDragId=id;
+  try{ ev.dataTransfer.setData('text/plain',id); ev.dataTransfer.effectAllowed='move'; }catch(e){}
+  ev.stopPropagation();
+}
+function calDragOver(ev){ ev.preventDefault(); ev.currentTarget.classList.add('dragover'); }
+function calDragLeave(ev){ ev.currentTarget.classList.remove('dragover'); }
+function __calDragged(ev){
+  let id=__calDragId;
+  try{ id = ev.dataTransfer.getData('text/plain') || id; }catch(e){}
+  return S.tasks.find(t=>t.id===id);
+}
+/* Jatuh di sel bulan -> ubah tanggal saja. */
+function calDropDay(ev,iso){
+  ev.preventDefault(); ev.currentTarget.classList.remove('dragover');
+  const t=__calDragged(ev); __calDragId=null;
+  if(!t || t.due===iso) return;
+  mutate(()=>{ t.due=iso; });
+  logAct('reschedule', t, {detail:'→ '+fmtDate(iso)});
+}
+/* Jatuh di baris sepanjang hari -> tanggal berubah, jam dikosongkan. */
+function calDropAllDay(ev,iso){
+  ev.preventDefault(); ev.currentTarget.classList.remove('dragover');
+  const t=__calDragged(ev); __calDragId=null;
+  if(!t) return;
+  mutate(()=>{ t.due=iso; t.time=null; });
+  logAct('reschedule', t, {detail:'→ '+fmtDate(iso)+' (tanpa jam)'});
+}
+/* Jatuh di slot jam -> tanggal + jam berubah (snap 30 menit). */
+function calDropSlot(ev,iso,hour){
+  ev.preventDefault(); ev.currentTarget.classList.remove('dragover');
+  const t=__calDragged(ev); __calDragId=null;
+  if(!t) return;
+  const r=ev.currentTarget.getBoundingClientRect();
+  const rel=(ev.clientY-r.top)/Math.max(1,r.height);
+  const min=rel>=0.5?30:0;                       // snap setengah jam
+  const time=String(hour).padStart(2,'0')+':'+String(min).padStart(2,'0');
+  mutate(()=>{ t.due=iso; t.time=time; });
+  logAct('reschedule', t, {detail:'→ '+fmtDate(iso)+' '+time});
+}
+/* Klik slot kosong -> task baru dengan tanggal & jam terisi. */
+function calNewAt(iso,hour){
+  const time=String(hour).padStart(2,'0')+':00';
+  const title=prompt('Task baru — '+fmtDate(iso)+' '+time+':');
+  if(!title) return;
+  const p=parseInput(title);
+  mutate(()=>S.tasks.push({id:uid(),title:p.title||title,notes:'',status:'todo',done:false,
+    priority:p.priority||'none',due:p.due||iso,time:p.time||time,tags:p.tags||[],
+    folderId:defaultLeaf(),subtasks:[],recur:p.recur||null,lead:0,snoozeUntil:null,
+    pinned:false,createdAt:Date.now()}));
+}
+
 function calDay(iso){
   const list=visibleTasks().filter(t=>t.due===iso);
   if(!list.length){ // quick create on empty day
@@ -2370,6 +2899,8 @@ const LOG_META={
   pin:     {ic:'pin',     c:'#F59E0B', v:'Di-pin'},
   unpin:   {ic:'pin',     c:'#8E8E93', v:'Unpin'},
   undo:    {ic:'history', c:'#6366F1', v:'Undo'},
+  reschedule:{ic:'calendar',c:'#3B82F6', v:'Dijadwal ulang'},
+  import:  {ic:'upload',  c:'#AF52DE', v:'Impor'},
 };
 function timeAgo(ts){
   const s=Math.floor((Date.now()-ts)/1000);
@@ -2461,7 +2992,7 @@ function importBoardPick(){
         S.tasks   = Array.isArray(d.tasks)  ? d.tasks   : [];
         if(Array.isArray(d.log)) S.log = d.log;
       });
-      logAct('import','Impor backup: '+nT+' task');
+      logAct('import', null, {title:'Impor backup', detail:nT+' task'});
       toast('Backup berhasil diimpor');
     };
     r.readAsText(f);
