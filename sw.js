@@ -1,9 +1,9 @@
-/* A31-PM — Service Worker
+/* A31 Board — Service Worker
    - Offline app-shell caching (network-first for the HTML, cache fallback)
    - Notification click / action handling (snooze, done, open)
    - Badge messages + skip-waiting support
 */
-const CACHE = 'a31-pm-v1';
+const CACHE = 'a31-board-v2';
 const SHELL = ['./', './index.html', './manifest.json', './favicon.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {

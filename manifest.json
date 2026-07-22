@@ -1,6 +1,6 @@
 {
-  "name": "A31-PM",
-  "short_name": "A31-PM",
+  "name": "A31 Board",
+  "short_name": "A31 Board",
   "description": "Personal project management — tasks, folders, recurrence, reminders, offline sync.",
   "start_url": "./",
   "scope": "./",

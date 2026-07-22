@@ -1,4 +1,4 @@
-# A31-PM
+# A31 Board
 
 Personal project management PWA — tasks, subfolders, recurrence, reminders, activity log,
 offline sync. Terhubung ke Firebase Firestore (project `a31-pm`).
