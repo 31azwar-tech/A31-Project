@@ -1,0 +1,32 @@
+# =====================================================================
+# A31-PM — Netlify configuration
+# Aplikasi statis satu halaman (PWA). Tidak ada build step.
+# =====================================================================
+
+[build]
+  publish = "."
+  command = ""
+
+# Service worker & manifest tidak boleh di-cache lama, supaya update
+# aplikasi langsung sampai ke perangkat.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

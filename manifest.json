@@ -1,0 +1,54 @@
+{
+  "name": "A31-PM",
+  "short_name": "A31-PM",
+  "description": "Personal project management — tasks, folders, recurrence, reminders, offline sync.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F6F8",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Task",
+      "short_name": "Add",
+      "url": "./?add=1"
+    },
+    {
+      "name": "Today",
+      "short_name": "Today",
+      "url": "./?smart=today"
+    },
+    {
+      "name": "Next 7 Days",
+      "short_name": "Next 7",
+      "url": "./?smart=next7"
+    }
+  ]
+}
