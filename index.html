@@ -886,12 +886,18 @@ function migrateFolders(){
 
 // Called once user is known. Loads cache instantly, then subscribes to realtime DB.
 let __remoteArrived=false;   // apakah snapshot pertama dari server sudah datang?
+let __remoteStamp=0;         // updatedAt milik dokumen server yang terakhir kita lihat
+let __localStamp=0;          // updatedAt milik state yang sedang ada di layar
+let __dirty=false;           // ada perubahan lokal yang belum tertulis ke server?
 async function startSync(uid){
   CURRENT_UID = uid;
   // 1) instant paint from local cache (offline-first) — HANYA untuk tampilan awal.
   //    Jangan seed di sini; tunggu server supaya tidak menimpa data perangkat lain.
   const cached = readLocalCache();
-  if(cached){ hydrate(cached); }
+  if(cached){
+    hydrate(cached);
+    __localStamp = (typeof cached.updatedAt==='number') ? cached.updatedAt : 0;
+  }
   render();
   if(new URLSearchParams(location.search).get('add')==='1'){ setTimeout(()=>{ try{ openAddTask(new Event('click')); }catch(e){} }, 300); }
   const __tq=new URLSearchParams(location.search).get('task');
@@ -906,7 +912,15 @@ async function startSync(uid){
         .then(()=>{ __lastError=''; setSync('saved'); })
         .catch((e)=>{ __lastError=(e&&(e.code||e.message))||String(e); setSync('error'); });
     }
-    window.__FB.bind(uid, (remote0)=>{
+    window.__FB.bind(uid, window.__onBoardSnapshot);
+  } else {
+    setSync('error'); // no config -> local-only mode
+  }
+}
+
+/* Handler snapshot dari server. Dijadikan fungsi bernama supaya bisa dipakai
+   ulang oleh resyncFromServer() saat aplikasi dibuka kembali. */
+window.__onBoardSnapshot = function(remote0){
       applyingRemote=true;
       // Data lama A31-PM? Konversi dulu ke skema A31 Board.
       let remote = remote0, __converted=false;
@@ -918,9 +932,23 @@ async function startSync(uid){
       const hasRemoteBoard = remote && (Array.isArray(remote.tasks) || (remote.folders && remote.folders.length));
       if(hasRemoteBoard){
         // Data server ada → pakai itu (menang atas cache lokal).
+        const rStamp = (typeof remote.updatedAt==='number') ? remote.updatedAt : 0;
+        // Kalau ada perubahan lokal yang belum tersimpan DAN state kita lebih
+        // baru, jangan timpa layar pengguna — biarkan push kita yang menang.
+        const localNewer = __dirty && __localStamp && rStamp && (__localStamp > rStamp);
+        if(localNewer){
+          applyingRemote=false;
+          __remoteArrived=true;
+          __remoteStamp=rStamp;
+          pushRemote();               // kirim perubahan lokal kita
+          return;
+        }
         hydrate(remote);
         __remoteArrived=true;
-        writeLocalCache({folders:S.folders,tasks:S.tasks,log:S.log,ui:{...S.ui,search:''}});
+        __remoteStamp = rStamp;
+        __localStamp  = rStamp;       // layar kini sama dengan server
+        __dirty = false;
+        writeLocalCache({folders:S.folders,tasks:S.tasks,log:S.log,ui:{...S.ui,search:''},updatedAt:rStamp});
         applyingRemote=false;
         setSync('saved');
         render();
@@ -942,11 +970,7 @@ async function startSync(uid){
           applyingRemote=false;
         }
       }
-    });
-  } else {
-    setSync('error'); // no config -> local-only mode
-  }
-}
+};
 
 /* ---------- Firestore helpers ----------
    Firestore MENOLAK nilai `undefined`. RTDB dulu diam-diam membuangnya,
@@ -1058,18 +1082,36 @@ function pushRemote(){
     // Belum ada apa-apa untuk ditulis & belum terima snapshot: jangan klaim 'Synced'.
     return;
   }
+  // PENGAMAN UTAMA (anti kehilangan data):
+  // Jangan pernah menimpa dokumen server yang LEBIH BARU daripada state kita.
+  // Ini yang mencegah HP yang baru bangun dari tidur (membawa data lama dari
+  // cache) menghapus task yang baru dibuat di perangkat lain.
+  if(__remoteStamp && __localStamp && __remoteStamp > __localStamp){
+    console.warn('A31: push dibatalkan — server lebih baru.',
+                 {server:__remoteStamp, lokal:__localStamp});
+    setSync('stale');
+    // Minta snapshot terbaru; onSnapshot akan menyusul dan memperbaiki layar.
+    return;
+  }
+  const stamp = Date.now();
   const payload = stripUndefined({
     schema:'a31board',                       // penanda skema (mencegah impor ulang)
     folders:S.folders,
     tasks:S.tasks,
     log:capLog(S.log),
     ui:{...S.ui, search:''},
-    updatedAt:Date.now()
+    updatedAt:stamp
   });
+  __localStamp = stamp;
   writeLocalCache(payload);
   if(window.__FB && window.__FB.configured && CURRENT_UID){
     window.__FB.push(CURRENT_UID, payload)
-      .then(()=>{ __lastError=''; setSync('saved'); })
+      .then(()=>{
+        __lastError='';
+        __remoteStamp = stamp;   // tulisan kita kini jadi versi server
+        __dirty = false;         // semua perubahan lokal sudah tersimpan
+        setSync('saved');
+      })
       .catch((e)=>{ __lastError=(e&&(e.code||e.message))||String(e); setSync('error'); });
   } else { __lastError='Firebase not configured'; setSync('error'); }
 }
@@ -1077,6 +1119,7 @@ function pushRemote(){
 // Public save() used everywhere in the app. Debounced. Skips echo of remote data.
 function save(){
   if(applyingRemote) return;          // don't write back what we just read
+  __dirty = true;                     // ada perubahan nyata dari pengguna
   setSync('saving');
   clearTimeout(saveTimer);
   saveTimer=setTimeout(pushRemote, 300);
@@ -1101,6 +1144,10 @@ function setSync(st){
     el.className='saving'; tx.textContent='Offline'; return;
   }
   if(st==='saving'){ el.className='saving'; tx.textContent='Saving…'; return; }
+  if(st==='stale'){
+    // Server punya versi lebih baru; kita menahan diri agar tidak menimpanya.
+    el.className='saving'; tx.textContent='Menyegarkan…'; return;
+  }
   if(st==='error'){
     // Write/read ke Firebase GAGAL untuk perangkat ini. Jangan sembunyikan:
     // tampilkan "Local only" yang jelas supaya user tahu belum tersinkron.
@@ -1113,7 +1160,14 @@ function setSync(st){
   el.className='saved'; tx.textContent='Synced';
 }
 // Perbarui label saat status jaringan berubah
-window.addEventListener('online',  ()=>{ setSync(__lastRemoteOk?'saved':'error'); pushRemote(); });
+window.addEventListener('online',  ()=>{
+  // JANGAN langsung pushRemote() di sini. Saat perangkat bangun dari tidur,
+  // state di layar bisa jadi versi LAMA (dari cache). Menulisnya ke server
+  // akan menimpa pekerjaan perangkat lain. Kita hanya menulis kalau memang
+  // ada perubahan lokal yang belum tersimpan (__dirty).
+  setSync(__lastRemoteOk?'saved':'error');
+  if(__dirty) pushRemote();
+});
 window.addEventListener('offline', ()=>setSync('offline'));
 
 /* ---------- Smart natural-language parser (Bahasa Indonesia) ---------- */
@@ -2614,6 +2668,35 @@ function scheduleDeadlineChecks(){
 }
 // Cek ulang saat app kembali ke depan (buka dari background di Android)
 document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkDeadlines(); });
+
+/* ---------- Sinkronisasi ulang saat aplikasi dibuka kembali ----------
+   Ketika HP tidur lama, koneksi realtime bisa mati diam-diam sehingga layar
+   masih menampilkan data lama. Saat aplikasi kembali ke depan kita PASANG
+   ULANG langganan supaya server mengirim snapshot terbaru. Kita TIDAK menulis
+   apa pun di sini — hanya membaca. Menulis di saat seperti ini persis yang
+   dulu menyebabkan task hilang. */
+let __resyncBusy=false;
+function resyncFromServer(){
+  if(__resyncBusy) return;
+  if(!window.__FB || !window.__FB.configured || !CURRENT_UID) return;
+  if(navigator.onLine===false) return;
+  __resyncBusy=true;
+  setSync('saving');
+  try{
+    // bind() memasang ulang onSnapshot dan langsung mengirim isi terbaru.
+    window.__FB.bind(CURRENT_UID, window.__onBoardSnapshot);
+  }catch(e){ console.warn('resync gagal', e); }
+  setTimeout(()=>{ __resyncBusy=false; }, 1500);
+}
+
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden) resyncFromServer();
+});
+window.addEventListener('pageshow', (e)=>{
+  // e.persisted = halaman dipulihkan dari bfcache (umum di iOS/Safari).
+  if(e && e.persisted) resyncFromServer();
+});
+window.addEventListener('focus', ()=>{ resyncFromServer(); });
 
 /* ---------- PWA: register service worker + install prompt ---------- */
 if('serviceWorker' in navigator){
