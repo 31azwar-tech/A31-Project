@@ -502,10 +502,77 @@ input,select,textarea{font:inherit;color:inherit}
   display:flex;align-items:center;justify-content:center}
 .sb-addbtn:hover{background:#E8EAEF;color:var(--blue)}
 .sb-addbtn.on{background:var(--blue);color:#fff}
+
+/* ================= Halaman Setting ================= */
+.setwrap{max-width:640px;margin:0 auto;padding:4px 2px 40px}
+.set-head{display:flex;align-items:center;gap:8px;padding:4px 2px 14px}
+.set-head b{font-size:19px;letter-spacing:-.01em}
+.set-back{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;color:var(--ink2)}
+.set-back:hover{background:#E8EAEF;color:var(--blue)}
+.set-sec{font-size:10.5px;font-weight:700;letter-spacing:.9px;color:var(--ink3);
+  text-transform:uppercase;padding:14px 4px 7px}
+.set-card{background:#fff;border-radius:14px;box-shadow:var(--sh);overflow:hidden}
+.set-row{display:flex;align-items:center;gap:11px;padding:13px 14px;width:100%;
+  text-align:left;background:none;border-bottom:1px solid #F1F2F5;font-size:14px;color:var(--ink)}
+.set-card .set-row:last-child{border-bottom:none}
+.set-row .ic{color:var(--ink3);display:flex;flex:0 0 auto}
+.set-lbl{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.set-lbl small{font-size:11.5px;color:var(--ink3);font-weight:400;line-height:1.4;
+  overflow:hidden;text-overflow:ellipsis}
+.set-row.nav{cursor:pointer;transition:background var(--tr)}
+.set-row.nav:hover{background:#F7F8FA}
+.set-row.nav:active{background:#EFF1F4}
+.set-row .chev{color:var(--ink3);display:flex;flex:0 0 auto}
+.set-row.danger .ic,.set-row.danger .set-lbl{color:var(--red)}
+.set-note{padding:9px 14px;font-size:11.5px;color:var(--red);background:#FEF2F2;
+  border-top:1px solid #F1F2F5;word-break:break-word}
+.set-pill{font-size:11px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.set-pill.st-ok{background:#E7F7EE;color:#137A45}
+.set-pill.st-off{background:#EEF0F3;color:var(--ink2)}
+.set-pill.st-err{background:#FDECEC;color:#B42318}
+.set-seg{display:flex;background:#EFF1F4;border-radius:9px;padding:2px;gap:2px;flex:0 0 auto}
+.set-seg button{font-size:12px;font-weight:600;padding:5px 10px;border-radius:7px;
+  color:var(--ink2);transition:background var(--tr),color var(--tr)}
+.set-seg button.on{background:#fff;color:var(--blue);box-shadow:0 1px 2px rgba(0,0,0,.09)}
+.set-hours{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.set-hours select{font-size:12.5px;padding:5px 7px;border-radius:8px;border:1px solid var(--line);
+  background:#fff;color:var(--ink)}
+.set-hours .dash{color:var(--ink3);font-size:12px}
+.set-foot{text-align:center;font-size:11.5px;color:var(--ink3);padding:26px 10px 0;line-height:1.7}
+:root[data-theme="dark"] .set-card{background:#22262E}
+:root[data-theme="dark"] .set-row{border-bottom-color:#2E333D}
+:root[data-theme="dark"] .set-row.nav:hover{background:#2A2F38}
+:root[data-theme="dark"] .set-seg{background:#2E333D}
+:root[data-theme="dark"] .set-seg button.on{background:#3A404B;color:#7FB2F5}
+:root[data-theme="dark"] .set-hours select{background:#2E333D;border-color:#3A404B;color:var(--ink)}
+:root[data-theme="dark"] .set-back:hover{background:#333944}
+:root[data-theme="dark"] .set-note{background:#3A2626}
+@media (max-width:640px){
+  .set-row{padding:12px 13px}
+  .set-seg button{padding:5px 8px;font-size:11.5px}
+}
 .sb-addbtn.on:hover{background:var(--blue);color:#fff;filter:brightness(1.08)}
 .sb-mini.sb-ord{color:var(--blue)}
 .sb-mini.sb-ord:hover{background:rgba(59,130,246,.14)}
 .sb-reorder-hint{font-size:11px;color:var(--ink3);padding:6px 10px 2px;line-height:1.5}
+.sb-head-btn{display:flex;align-items:center;gap:5px;cursor:pointer;width:100%;
+  background:none;text-align:left;border-radius:7px;transition:background var(--tr)}
+.sb-head-btn:hover{background:#EDEFF3}
+.sb-caret{display:flex;align-items:center;color:var(--ink3);flex:0 0 auto}
+.sb-sum{font-size:10.5px;font-weight:700;color:var(--ink3);letter-spacing:.2px;
+  font-variant-numeric:tabular-nums;padding-right:2px}
+.sb-tag .tag-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;margin:0 3px}
+.sb-tag .lbl{font-variant-numeric:tabular-nums}
+.sb-more{font-size:11.5px;color:var(--blue);font-weight:600;padding:5px 10px 7px 30px;
+  width:100%;text-align:left;background:none;cursor:pointer}
+.sb-more:hover{text-decoration:underline}
+#collapse-btn{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;color:var(--ink2);transition:background var(--tr),color var(--tr)}
+#collapse-btn:hover{background:#E8EAEF;color:var(--blue)}
+#collapse-btn.on{background:rgba(59,130,246,.14);color:var(--blue)}
+:root[data-theme="dark"] .sb-head-btn:hover{background:#2A2F38}
+:root[data-theme="dark"] #collapse-btn:hover{background:#333944}
 .sb-reorder-hint a{color:var(--blue);font-weight:600;cursor:pointer}
 .sb-reorder-hint a:hover{text-decoration:underline}
 :root[data-theme="dark"] .sb-addbtn:hover{background:#333944}
@@ -615,6 +682,7 @@ optgroup{font-size:11px;color:var(--ink3)}
       <div id="searchwrap"><svg class="search-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m21 21-4.3-4.3M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/></svg><input id="search" type="text" placeholder="Search tasks…" oninput="S.ui.search=this.value;render()"></div>
       <div class="seg" id="groupseg"></div>
       <button id="completed-toggle" onclick="toggleCompleted()" title="Show/Hide completed tasks"></button>
+      <button id="collapse-btn" onclick="toggleAllSections()"></button>
       <button id="filter-btn" onclick="openFilter(event)" title="Filter tasks"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.5V19l4 2v-8.5L22 3Z"/></svg><span id="filter-count"></span></button>
       <button id="add-task-btn" onclick="openAddTask(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add Task</button>
     </header>
@@ -706,6 +774,15 @@ const APP_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADi
    One weight, round caps/joins. Color is inherited from the surrounding element,
    so folder icons take their folder color automatically. */
 const ICON_PATHS = {
+  cloud:'M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.2 9.2 4 4 0 0 0 7 19Z',
+  user:'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z',
+  settings:'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z',
+  logout:'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9',
+  download:'M12 3v12M7 11l5 5 5-5M4 21h16',
+  upload:'M12 21V9M7 13l5-5 5 5M4 3h16',
+  chevRightSm:'M9 6l6 6-6 6',
+  tag:'M20.6 13.4 12 4.8A2 2 0 0 0 10.6 4H5a1 1 0 0 0-1 1v5.6a2 2 0 0 0 .6 1.4l8.6 8.6a2 2 0 0 0 2.8 0l4.6-4.6a2 2 0 0 0 0-2.6ZM7.5 7.5h.01',
+  clock:'M12 7v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z',
   sort:'M7 4v16M7 4 4 7M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3',
   collapseAll:'M4 6h16M4 18h16M9 11l3-3 3 3M9 13l3 3 3-3',
   expandAll:'M4 6h16M4 18h16M12 9v6M9 12h6',
@@ -789,6 +866,11 @@ const FOLDER_ICON_SET = ['folder','inbox','money','target','yoga','leaf','heart'
   'star','rocket','book','compass','globe','puzzle'];
 const GROUP_ICON_SET = ['trophy','briefcase','home','target','star','rocket','book','puzzle','folders','globe'];
 
+/* Format Date -> 'YYYY-MM-DD' memakai waktu LOKAL.
+   Jangan pakai toISOString(): itu UTC dan bisa menggeser tanggal. */
+const ymd = (d) => { d = (d instanceof Date) ? d : new Date(d);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const APP_VERSION = '2.2';
 const todayISO = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const addDays = (iso,n) => { const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
@@ -817,15 +899,28 @@ let S = {
   log: [],
   ui: { view:'kanban', groupBy:'status', search:'', smart:'all', folder:null,
         collapsed:{}, sort:{}, calYM:null, seeded:false, foldOpen:{}, reorder:false,
+        workHours:{start:7,end:17}, listsCollapsed:false, tagsCollapsed:false,
+        tagsExpanded:false, calMode:'month',
         filter:{tags:[],priorities:[],due:'any',from:'',to:''} }
 };
 
 /* ---------- Theme (dark mode) ---------- */
 const THEME_KEY='a31-theme';
+function themePref(){
+  const saved=localStorage.getItem(THEME_KEY);
+  return (saved==='dark'||saved==='light')?saved:'auto';
+}
 function currentTheme(){
   const saved=localStorage.getItem(THEME_KEY);
   if(saved==='dark'||saved==='light') return saved;
   return (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches)?'dark':'light';
+}
+/* Pilih tema: 'light' | 'dark' | 'auto' (ikut sistem) */
+function setThemePref(mode){
+  if(mode==='auto') localStorage.removeItem(THEME_KEY);
+  else localStorage.setItem(THEME_KEY, mode);
+  applyTheme(currentTheme());
+  render();
 }
 function applyTheme(mode){
   document.documentElement.setAttribute('data-theme', mode);
@@ -1328,6 +1423,11 @@ function taskMatches(t){
       if(!kids.includes(t.folderId)) return false; }
     else if(t.folderId!==S.ui.folder) return false;
   }
+  // ---- Shortcut #tag dari sidebar (satu tag) ----
+  if(S.ui.tag){
+    const tt=(t.tags||[]).map(x=>String(x).toLowerCase());
+    if(!tt.includes(S.ui.tag)) return false;
+  }
   const td=todayISO();
   // ---- Advanced filter (tag + priority + due range) ----
   const F=S.ui.filter;
@@ -1622,6 +1722,120 @@ function renderBoard(el){
   }).join('') + `</div>`;
 }
 function toggleSec(k){ S.ui.collapsed[k]=!S.ui.collapsed[k]; save(); render(); }
+
+/* ---------- Bulk collapse: semua grup di semua kolom Kanban ----------
+   Memakai state yang sudah ada (S.ui.collapsed), jadi tombol per grup
+   tetap berfungsi seperti biasa. */
+function sectionKeys(){
+  const keys=[];
+  const cols=columnsFor(S.ui.groupBy);
+  const tasks=visibleTasks();
+  for(const c of cols){
+    const ct=tasks.filter(c.test);
+    for(const sec of subsections(sortTasks(ct,'new'))){
+      keys.push(S.ui.groupBy+':'+c.key+':'+sec.key);
+    }
+  }
+  return keys;
+}
+/* Terbuka kalau MASIH ADA minimal satu grup yang terbuka. */
+function allSectionsOpen(){
+  const keys=sectionKeys();
+  if(!keys.length) return true;
+  return keys.some(k=>!S.ui.collapsed[k]);
+}
+function toggleAllSections(){
+  const close = allSectionsOpen();       // ada yang terbuka -> tutup semua
+  const keys  = sectionKeys();
+  keys.forEach(k=>{ S.ui.collapsed[k] = close; });
+  save(); render();
+}
+/* Perbarui ikon + tooltip tombol bulk collapse di top bar. */
+function refreshCollapseBtn(){
+  const b=document.getElementById('collapse-btn');
+  if(!b) return;
+  const onBoard = ['kanban','split'].includes(S.ui.view);
+  b.style.display = onBoard ? '' : 'none';
+  if(!onBoard) return;
+  const open = allSectionsOpen();
+  b.innerHTML = ic(open?'collapseAll':'expandAll',16);
+  b.title = open ? 'Tutup semua grup' : 'Buka semua grup';
+  b.classList.toggle('on', !open);
+}
+
+/* ---------- Sidebar: lipat seluruh bagian Lists ---------- */
+function toggleLists(){
+  S.ui.listsCollapsed = !S.ui.listsCollapsed;
+  save(); render();
+}
+function toggleTagsSec(){
+  S.ui.tagsCollapsed = !S.ui.tagsCollapsed;
+  save(); render();
+}
+function toggleTagsMore(){
+  S.ui.tagsExpanded = !S.ui.tagsExpanded;
+  save(); render();
+}
+
+/* ---------- Shortcut #tag ----------
+   Warna dihitung dari NAMA tag (hash sederhana), jadi tidak perlu
+   disimpan dan selalu sama di semua perangkat. */
+const TAG_PALETTE = ['#34C759','#3B82F6','#FF9500','#AF52DE','#EC4899',
+                     '#30B0C7','#E5484D','#8B5CF6'];
+function tagColor(name){
+  let h = 0;
+  const t = String(name||'').toLowerCase();
+  for(let i=0;i<t.length;i++){ h = (h*31 + t.charCodeAt(i)) >>> 0; }
+  return TAG_PALETTE[h % TAG_PALETTE.length];
+}
+/* Daftar tag + jumlah task, urut terbanyak. */
+function tagCounts(){
+  const m = new Map();
+  for(const t of S.tasks){
+    if(t.done && S.ui.showCompleted===false) continue;
+    for(const raw of (t.tags||[])){
+      const k = String(raw).toLowerCase();
+      m.set(k, (m.get(k)||0) + 1);
+    }
+  }
+  return [...m.entries()]
+    .map(([name,count])=>({name,count}))
+    .sort((a,b)=> b.count-a.count || a.name.localeCompare(b.name));
+}
+/* Klik tag = filter satu tag. Klik lagi = batalkan. */
+function goTag(name){
+  S.ui.tag = (S.ui.tag===name) ? null : name;
+  if(S.ui.tag){ S.ui.folder=null; S.ui.smart='all';
+    if(!['kanban','split'].includes(S.ui.view)) S.ui.view='kanban'; }
+  save(); render(); closeDrawer();
+}
+const TAG_LIMIT = 5;
+function renderTagSection(){
+  const all = tagCounts();
+  if(!all.length) return '';           // belum ada tag -> jangan tampilkan apa pun
+  const collapsed = !!S.ui.tagsCollapsed;
+  const expanded  = !!S.ui.tagsExpanded;
+  const shown     = expanded ? all : all.slice(0, TAG_LIMIT);
+  const rest      = all.length - shown.length;
+
+  return `
+    <div class="sb-heading sb-head-btn" onclick="toggleTagsSec()"
+      title="${collapsed?'Buka daftar tag':'Lipat daftar tag'}">
+      <span class="sb-caret">${ic(collapsed?'chevRightSm':'chevDown',13)}</span>
+      <span style="flex:1">Tags</span>
+      <span class="sb-sum">${all.length}</span>
+    </div>
+    ${collapsed ? '' : `
+      ${shown.map(t=>`
+        <button class="sb-item sb-tag ${S.ui.tag===t.name?'active':''}" onclick="goTag('${esc(t.name)}')">
+          <span class="tag-dot" style="background:${tagColor(t.name)}"></span>
+          <span class="lbl">#${esc(t.name)}</span>
+          <span class="cnt">${t.count}</span>
+        </button>`).join('')}
+      ${rest>0 ? `<button class="sb-more" onclick="toggleTagsMore()">+${rest} lagi…</button>` : ''}
+      ${expanded && all.length>TAG_LIMIT ? `<button class="sb-more" onclick="toggleTagsMore()">Tampilkan lebih sedikit</button>` : ''}
+    `}`;
+}
 
 /* ---------- Sidebar: tutup/buka semua folder ---------- */
 function allGroupsOpen(){
@@ -2165,6 +2379,193 @@ function timeAgo(ts){
   const d=new Date(ts);
   return d.getDate()+' '+MONTHS[d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
 }
+/* ================= HALAMAN SETTING ================= */
+
+function workHours(){
+  const w = (S.ui && S.ui.workHours) || {};
+  const st = Number.isFinite(+w.start) ? +w.start : 7;
+  const en = Number.isFinite(+w.end)   ? +w.end   : 17;
+  return { start: Math.min(st,en), end: Math.max(st,en) };
+}
+function setWorkHour(which, val){
+  const w = workHours();
+  const v = Math.max(0, Math.min(23, parseInt(val,10)||0));
+  const next = { start:w.start, end:w.end };
+  next[which] = v;
+  if(next.start >= next.end){          // jaga agar tetap masuk akal
+    if(which==='start') next.end = Math.min(23, next.start+1);
+    else                next.start = Math.max(0, next.end-1);
+  }
+  mutate(()=>{ S.ui.workHours = next; });
+}
+
+/* Waktu terakhir tersimpan, dibaca dari stempel dokumen. */
+function lastSavedText(){
+  const t = __remoteStamp || __localStamp || 0;
+  if(!t) return 'belum ada data';
+  const d = new Date(t);
+  const diff = Math.floor((Date.now()-t)/1000);
+  if(diff < 60)   return 'beberapa detik lalu';
+  if(diff < 3600) return Math.floor(diff/60)+' menit lalu';
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return fmtDate(ymd(d)) + ' ' + hh + ':' + mm;
+}
+function syncLabel(){
+  if(navigator.onLine===false) return {txt:'Offline', cls:'st-off'};
+  if(__lastError)              return {txt:'Bermasalah', cls:'st-err'};
+  return {txt:'Tersinkron', cls:'st-ok'};
+}
+
+/* ---------- Export / Import ---------- */
+function exportBoard(){
+  const payload = stripUndefined({
+    schema:'a31board', folders:S.folders, tasks:S.tasks,
+    log:capLog(S.log), ui:{...S.ui, search:''}, updatedAt:Date.now()
+  });
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'a31-board-' + ymd(new Date()) + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  toast('Backup diunduh');
+}
+function importBoardPick(){
+  const inp = document.createElement('input');
+  inp.type='file'; inp.accept='application/json,.json';
+  inp.onchange = () => {
+    const f = inp.files && inp.files[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      let data;
+      try { data = JSON.parse(r.result); }
+      catch(e){ alert('File tidak bisa dibaca. Pastikan ini file backup A31 Board (.json).'); return; }
+      if(!data || (!Array.isArray(data.tasks) && !Array.isArray(data.folders))){
+        alert('Isi file tidak dikenali sebagai backup A31 Board.'); return;
+      }
+      const nT = Array.isArray(data.tasks)? data.tasks.length : 0;
+      const nF = Array.isArray(data.folders)? data.folders.length : 0;
+      const ok = confirm(
+        'Impor backup ini?\n\n' + nT + ' task · ' + nF + ' folder\n\n' +
+        'SEMUA data yang ada sekarang (' + S.tasks.length + ' task) akan DIGANTI.\n' +
+        'Tindakan ini tidak bisa dibatalkan.'
+      );
+      if(!ok) return;
+      let d = data;
+      if(looksLikeLegacyPM(d)){ try{ d = convertLegacyPM(d); }catch(e){} }
+      mutate(()=>{
+        S.folders = Array.isArray(d.folders)? d.folders : S.folders;
+        S.tasks   = Array.isArray(d.tasks)  ? d.tasks   : [];
+        if(Array.isArray(d.log)) S.log = d.log;
+      });
+      logAct('import','Impor backup: '+nT+' task');
+      toast('Backup berhasil diimpor');
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+}
+
+function confirmLogout(){
+  if(!confirm('Keluar dari akun ini?\n\nData sudah tersimpan di server dan akan muncul lagi saat Anda masuk kembali.')) return;
+  window.__logout();
+}
+
+function renderSetting(el){
+  const th   = themePref();
+  const w    = workHours();
+  const sy   = syncLabel();
+  const mail = (window.__USER && window.__USER.email) || '—';
+  const hrs  = Array.from({length:24},(_,i)=>i);
+
+  el.innerHTML = `
+  <div class="setwrap">
+    <div class="set-head">
+      <button class="set-back" onclick="goView('kanban')" title="Kembali">${ic('chevLeft',18)}</button>
+      <b>Setting</b>
+    </div>
+
+    <div class="set-sec">Tampilan</div>
+    <div class="set-card">
+      <div class="set-row">
+        <span class="ic">${ic(currentTheme()==='dark'?'moon':'sun',17)}</span>
+        <span class="set-lbl">Tema</span>
+        <div class="set-seg">
+          <button class="${th==='light'?'on':''}" onclick="setThemePref('light')">Terang</button>
+          <button class="${th==='dark' ?'on':''}" onclick="setThemePref('dark')">Gelap</button>
+          <button class="${th==='auto' ?'on':''}" onclick="setThemePref('auto')">Sistem</button>
+        </div>
+      </div>
+      <div class="set-row">
+        <span class="ic">${ic('clock',17)}</span>
+        <span class="set-lbl">Jam kerja
+          <small>Dipakai kalender &amp; grafik meeting</small></span>
+        <div class="set-hours">
+          <select onchange="setWorkHour('start',this.value)">
+            ${hrs.map(h=>`<option value="${h}" ${h===w.start?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('')}
+          </select>
+          <span class="dash">–</span>
+          <select onchange="setWorkHour('end',this.value)">
+            ${hrs.map(h=>`<option value="${h}" ${h===w.end?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-sec">Data</div>
+    <div class="set-card">
+      <button class="set-row nav" onclick="goView('activity')">
+        <span class="ic">${ic('history',17)}</span>
+        <span class="set-lbl">Activity Log
+          <small>${(S.log||[]).length} catatan</small></span>
+        <span class="chev">${ic('chevRightSm',15)}</span>
+      </button>
+      <button class="set-row nav" onclick="exportBoard()">
+        <span class="ic">${ic('download',17)}</span>
+        <span class="set-lbl">Export backup
+          <small>Simpan seluruh board sebagai file .json</small></span>
+        <span class="chev">${ic('chevRightSm',15)}</span>
+      </button>
+      <button class="set-row nav" onclick="importBoardPick()">
+        <span class="ic">${ic('upload',17)}</span>
+        <span class="set-lbl">Import backup
+          <small>Mengganti semua data yang ada</small></span>
+        <span class="chev">${ic('chevRightSm',15)}</span>
+      </button>
+      <div class="set-row">
+        <span class="ic">${ic('cloud',17)}</span>
+        <span class="set-lbl">Status sinkron
+          <small>Terakhir tersimpan ${lastSavedText()}</small></span>
+        <span class="set-pill ${sy.cls}">${sy.txt}</span>
+      </div>
+      ${__lastError?`<div class="set-note">${esc(String(__lastError))}</div>`:''}
+    </div>
+
+    <div class="set-sec">Akun</div>
+    <div class="set-card">
+      <div class="set-row">
+        <span class="ic">${ic('user',17)}</span>
+        <span class="set-lbl">Masuk sebagai
+          <small>${esc(mail)}</small></span>
+      </div>
+      <button class="set-row nav danger" onclick="confirmLogout()">
+        <span class="ic">${ic('logout',17)}</span>
+        <span class="set-lbl">Keluar</span>
+        <span class="chev">${ic('chevRightSm',15)}</span>
+      </button>
+    </div>
+
+    <div class="set-foot">
+      A31 Board · versi ${APP_VERSION}<br>
+      Database: Firestore <b>a31-pm</b><br>
+      ${S.tasks.length} task · ${S.folders.length} folder
+    </div>
+  </div>`;
+}
+
 function renderActivity(el){
   ensureLog();
   const log=S.log;
@@ -2263,12 +2664,12 @@ function snoozeTask(id, mins){
   toast('Pengingat ditunda');
 }
 
-function goSmart(k){ S.ui.smart=k; S.ui.folder=null;
+function goSmart(k){ S.ui.tag=null; S.ui.smart=k; S.ui.folder=null;
   if(!['kanban','split'].includes(S.ui.view)&&S.ui.view!=='calendar') S.ui.view='kanban';
   if(S.ui.view==='split'&&isMobile()) S.ui.view='kanban';
   save(); render(); closeDrawer(); }
 function goView(v){ S.ui.view=v; save(); render(); closeDrawer(); }
-function goFolder(fid){ S.ui.folder=(S.ui.folder===fid?null:fid); S.ui.smart='all'; save(); render(); closeDrawer(); }
+function goFolder(fid){ S.ui.tag=null; S.ui.folder=(S.ui.folder===fid?null:fid); S.ui.smart='all'; save(); render(); closeDrawer(); }
 
 function renderSidebar(){
   const sb=document.getElementById('sidebar');
@@ -2281,25 +2682,24 @@ function renderSidebar(){
       <span class="cnt">${smartCount(k)}</span></button>`).join('')}
     <button class="sb-item ${S.ui.view==='dashboard'?'active':''}" onclick="goView('dashboard')">
       <span class="ic">${ic('summary')}</span><span class="lbl">Summary</span></button>
-    <button class="sb-item ${S.ui.view==='activity'?'active':''}" onclick="goView('activity')">
-      <span class="ic">${ic('history')}</span><span class="lbl">Activity Log</span></button>
-    <button class="sb-item" onclick="toggleTheme()">
-      <span class="ic">${ic(currentTheme()==='dark'?'sun':'moon')}</span><span class="lbl">${currentTheme()==='dark'?'Light mode':'Dark mode'}</span></button>
     <div class="sb-heading">Views</div>
     ${VIEWS.filter(([v])=>!(isMobile()&&v==='split')).map(([v,icn,lbl])=>
       `<button class="sb-item ${S.ui.view===v?'active':''}" onclick="goView('${v}')">
         <span class="ic">${ic(icn)}</span><span class="lbl">${lbl}</span></button>`).join('')}
     <button class="sb-item ${S.ui.view==='kanban'?'active':''}" onclick="goView('kanban')">
       <span class="ic">${ic('kanban')}</span><span class="lbl">Kanban</span></button>
-    <div class="sb-heading" style="display:flex;align-items:center">
+    <div class="sb-heading sb-head-btn" onclick="toggleLists()" title="${S.ui.listsCollapsed?'Buka daftar folder':'Lipat semua folder'}">
+      <span class="sb-caret">${ic(S.ui.listsCollapsed?'chevRightSm':'chevDown',13)}</span>
       <span style="flex:1">Lists</span>
-      <button class="sb-addbtn ${S.ui.reorder?'on':''}" title="${S.ui.reorder?'Selesai atur urutan':'Atur urutan folder'}"
-        onclick="event.stopPropagation();toggleReorder()">${ic('sort',15)}</button>
-      <button class="sb-addbtn" title="${allGroupsOpen()?'Tutup semua folder':'Buka semua folder'}"
-        onclick="event.stopPropagation();toggleAllGroups()">${ic(allGroupsOpen()?'collapseAll':'expandAll',15)}</button>
-      <button class="sb-addbtn" title="Add parent folder" onclick="event.stopPropagation();addGroup()">${ic('plus',15)}</button>
+      ${S.ui.listsCollapsed
+        ? `<span class="sb-sum">${S.folders.length} · ${visibleTasks().length}</span>`
+        : `<button class="sb-addbtn ${S.ui.reorder?'on':''}" title="${S.ui.reorder?'Selesai atur urutan':'Atur urutan folder'}"
+             onclick="event.stopPropagation();toggleReorder()">${ic('sort',15)}</button>
+           <button class="sb-addbtn" title="${allGroupsOpen()?'Tutup semua folder':'Buka semua folder'}"
+             onclick="event.stopPropagation();toggleAllGroups()">${ic(allGroupsOpen()?'collapseAll':'expandAll',15)}</button>
+           <button class="sb-addbtn" title="Add parent folder" onclick="event.stopPropagation();addGroup()">${ic('plus',15)}</button>`}
     </div>
-    ${groups().map(g=>{
+    ${S.ui.listsCollapsed ? '' : groups().map(g=>{
       const open=S.ui.foldOpen[g.id]!==false;
       const kids=childrenOf(g.id);
       return `<div class="sb-group">
@@ -2331,9 +2731,11 @@ function renderSidebar(){
         </div>
       </div>`;
     }).join('')}
-    ${S.ui.reorder ? `<div class="sb-reorder-hint">Mode atur urutan aktif — pakai tombol ↑ ↓.
-      <a onclick="toggleReorder()">Selesai</a></div>` : ''}
-    <button class="sb-addgroup" onclick="addGroup()">${ic('plus',14)} New parent folder</button>`;
+    ${S.ui.listsCollapsed ? '' : `
+      ${S.ui.reorder ? `<div class="sb-reorder-hint">Mode atur urutan aktif — pakai tombol ↑ ↓.
+        <a onclick="toggleReorder()">Selesai</a></div>` : ''}
+      <button class="sb-addgroup" onclick="addGroup()">${ic('plus',14)} New parent folder</button>`}
+    ${renderTagSection()}`;
 }
 function renderRail(){
   const r=document.getElementById('rail');
@@ -2352,7 +2754,8 @@ function renderRail(){
      <div class="spacer"></div>
      <button class="rail-btn ${S.ui.view==='activity'?'active':''}" onclick="goView('activity')">${ic('history',20)}<span class="tip">Activity Log</span></button>
      <button class="rail-btn" onclick="toggleTheme()">${ic(currentTheme()==='dark'?'sun':'moon',20)}<span class="tip">${currentTheme()==='dark'?'Light mode':'Dark mode'}</span></button>
-     <button class="rail-btn ${S.ui.view==='dashboard'?'active':''}" onclick="goView('dashboard')">${ic('dashboard',20)}<span class="tip">Dashboard</span></button>`;
+     <button class="rail-btn ${S.ui.view==='dashboard'?'active':''}" onclick="goView('dashboard')">${ic('dashboard',20)}<span class="tip">Dashboard</span></button>
+     <button class="rail-btn ${S.ui.view==='setting'?'active':''}" onclick="goView('setting')">${ic('settings',20)}<span class="tip">Setting</span></button>`;
 }
 function renderTabbar(){
   const tb=document.getElementById('tabbar');
@@ -2367,7 +2770,7 @@ function renderTabbar(){
       ${ic('plus',26)}</button>
     <button id="tb-search" onclick="tabSearch()">
       <span class="ti">${ic('search',22)}</span>Search</button>
-    <button id="tb-setting" onclick="openDrawer()">
+    <button id="tb-setting" class="${S.ui.view==='setting'?'active':''}" onclick="goView('setting')">
       <span class="ti">${ic('settings',22)}</span>Setting</button>`;
 }
 function tabKanban(){ S.ui.view='kanban'; save(); render(); closeDrawer(); }
@@ -2396,7 +2799,8 @@ document.addEventListener('touchmove',e=>{ if(touchX0!==null && e.touches[0].cli
 
 /* ---------- Top bar ---------- */
 const VIEW_TITLES={kanban:'Kanban',split:'Kanban + Calendar',dashboard:'Dashboard',
-  calendar:'Calendar',timeline:'Timeline',eisenhower:'Eisenhower Matrix',activity:'Activity Log'};
+  calendar:'Calendar',timeline:'Timeline',eisenhower:'Eisenhower Matrix',activity:'Activity Log',
+  setting:'Setting'};
 function renderTopbar(){
   const smartLbl={all:'',today:' · Today',tomorrow:' · Tomorrow',next7:' · Next 7 Days',inbox:' · Inbox'}[S.ui.smart]||'';
   const fl=S.ui.folder?(' · '+folderOf(S.ui.folder).name):'';
@@ -2430,6 +2834,7 @@ function render(){
   if(S.ui.view==='split'&&isMobile()) S.ui.view='kanban';
   document.getElementById('app').classList.toggle('sidebar-hidden', !!S.ui.sidebarHidden && !isMobile());
   renderRail(); renderSidebar(); renderTabbar(); renderTopbar();
+  refreshCollapseBtn();
   const c=document.getElementById('content');
   switch(S.ui.view){
     case 'dashboard': renderDash(c); break;
@@ -2438,6 +2843,7 @@ function render(){
     case 'timeline': renderTimeline(c); break;
     case 'eisenhower': renderEisenhower(c); break;
     case 'activity': renderActivity(c); break;
+    case 'setting': renderSetting(c); break;
     default: renderBoard(c);
   }
   refreshAppBadge();      // sinkronkan angka merah di ikon aplikasi
