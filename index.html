@@ -688,6 +688,14 @@ input,select,textarea{font:inherit;color:inherit}
 .set-hours select{font-size:12.5px;padding:5px 7px;border-radius:8px;border:1px solid var(--line);
   background:#fff;color:var(--ink)}
 .set-hours .dash{color:var(--ink3);font-size:12px}
+.set-sw{width:42px;height:24px;border-radius:14px;background:#D5D8DD;position:relative;
+  flex:0 0 auto;transition:background var(--tr);cursor:pointer}
+.set-sw span{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform var(--tr)}
+.set-sw.on{background:var(--green)}
+.set-sw.on span{transform:translateX(18px)}
+.set-hours select:disabled{opacity:.45}
+:root[data-theme="dark"] .set-sw{background:#3A404B}
 .set-foot{text-align:center;font-size:11.5px;color:var(--ink3);padding:26px 10px 0;line-height:1.7}
 :root[data-theme="dark"] .set-card{background:#22262E}
 :root[data-theme="dark"] .set-row{border-bottom-color:#2E333D}
@@ -1019,7 +1027,7 @@ const GROUP_ICON_SET = ['trophy','briefcase','home','target','star','rocket','bo
    Jangan pakai toISOString(): itu UTC dan bisa menggeser tanggal. */
 const ymd = (d) => { d = (d instanceof Date) ? d : new Date(d);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-const APP_VERSION = '2.3';
+const APP_VERSION = '2.4';
 const todayISO = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const addDays = (iso,n) => { const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
@@ -1049,6 +1057,7 @@ let S = {
   ui: { view:'kanban', groupBy:'status', search:'', smart:'all', folder:null,
         collapsed:{}, sort:{}, calYM:null, seeded:false, foldOpen:{}, reorder:false,
         workHours:{start:7,end:17}, listsCollapsed:false, tagsCollapsed:false,
+        notif:{enabled:true, digest:true, digestHour:7, respectWorkHours:true, lastDigest:''},
         tagsExpanded:false, calMode:'month',
         filter:{tags:[],priorities:[],due:'any',from:'',to:''} }
 };
@@ -1112,6 +1121,10 @@ function hydrate(d){
   S.ui      = Object.assign(S.ui, d.ui||{}, {search:''});
   if(!S.ui.foldOpen) S.ui.foldOpen={};
   if(!S.ui.filter) S.ui.filter={tags:[],priorities:[],due:'any',from:'',to:''};
+  // Default aman untuk setelan yang mungkin belum ada di dokumen lama.
+  if(!S.ui.workHours) S.ui.workHours={start:7,end:17};
+  if(!S.ui.notif) S.ui.notif={enabled:true,digest:true,digestHour:7,respectWorkHours:true,lastDigest:''};
+  if(!S.ui.calMode) S.ui.calMode='month';
   // Normalisasi field baru pada task lama (recurrence, lead-time, snooze).
   for(const t of S.tasks){
     if(!('recur' in t)) t.recur=null;
@@ -3005,8 +3018,51 @@ function confirmLogout(){
   window.__logout();
 }
 
+/* Sakelar kecil untuk halaman Setting. */
+function setSwitch(key, on){
+  return `<button class="set-sw ${on?'on':''}" role="switch" aria-checked="${on}"
+    onclick="setNotif('${key}',${on?'false':'true'})"><span></span></button>`;
+}
+function notifPermText(){
+  if(!('Notification' in window)) return 'Perangkat tidak mendukung';
+  if(Notification.permission==='granted') return 'Aktif';
+  if(Notification.permission==='denied')  return 'Diblokir — ubah di setelan browser';
+  return 'Belum diizinkan — ketuk untuk mengizinkan';
+}
+function notifToggleHTML(){
+  const granted = ('Notification' in window) && Notification.permission==='granted';
+  const nc = notifCfg();
+  const on = granted && nc.enabled;
+  return `<button class="set-sw ${on?'on':''}" role="switch" aria-checked="${on}"
+    onclick="toggleNotifMaster()"><span></span></button>`;
+}
+async function toggleNotifMaster(){
+  if(!('Notification' in window)) { toast('Perangkat tidak mendukung notifikasi'); return; }
+  if(Notification.permission==='denied'){
+    alert('Notifikasi diblokir oleh browser.\n\nUbah manual di setelan situs (ikon gembok di address bar → Notifications → Allow).');
+    return;
+  }
+  if(Notification.permission!=='granted'){
+    const ok = await ensureNotifPermission();
+    if(!ok){ render(); return; }
+  }
+  // Sudah granted → toggle preferensi enabled
+  mutate(()=>{ S.ui.notif.enabled = !notifCfg().enabled; });
+  if(notifCfg().enabled) scheduleDeadlineChecks();
+}
+function setNotif(key, val){
+  let v = val;
+  if(typeof val==='boolean') v = val;                 // sudah boolean, jangan diutak-atik
+  else if(val==='true') v=true;
+  else if(val==='false') v=false;
+  else if(typeof val==='string' && val.trim()!=='' && !isNaN(+val)) v=+val;
+  if(!S.ui.notif) S.ui.notif={};
+  mutate(()=>{ S.ui.notif[key] = v; });
+}
+
 function renderSetting(el){
   const th   = themePref();
+  const nc   = notifCfg();
   const w    = workHours();
   const sy   = syncLabel();
   const mail = (window.__USER && window.__USER.email) || '—';
@@ -3043,6 +3099,33 @@ function renderSetting(el){
             ${hrs.map(h=>`<option value="${h}" ${h===w.end?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('')}
           </select>
         </div>
+      </div>
+    </div>
+
+    <div class="set-sec">Notifikasi</div>
+    <div class="set-card">
+      <div class="set-row">
+        <span class="ic">${ic('bell',17)}</span>
+        <span class="set-lbl">Izinkan notifikasi
+          <small>${notifPermText()}</small></span>
+        ${notifToggleHTML()}
+      </div>
+      <div class="set-row">
+        <span class="ic">${ic('sun',17)}</span>
+        <span class="set-lbl">Ringkasan pagi
+          <small>Satu notif berisi ringkasan hari ini</small></span>
+        <div class="set-hours">
+          <select onchange="setNotif('digestHour',this.value)" ${nc.digest?'':'disabled'}>
+            ${Array.from({length:24},(_,h)=>`<option value="${h}" ${h===nc.digestHour?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('')}
+          </select>
+          ${setSwitch('digest', nc.digest)}
+        </div>
+      </div>
+      <div class="set-row">
+        <span class="ic">${ic('clock',17)}</span>
+        <span class="set-lbl">Batasi ke jam kerja
+          <small>Tidak mengganggu di luar ${String(workHours().start).padStart(2,'0')}–${String(workHours().end).padStart(2,'0')}</small></span>
+        ${setSwitch('respectWorkHours', nc.respectWorkHours)}
       </div>
     </div>
 
@@ -3614,12 +3697,14 @@ async function ensureNotifPermission(){
 
 /* Tampilkan notifikasi (lewat SW kalau ada, agar muncul di Android
    meski tab tidak fokus). */
-async function fireNotification(title, body, tag, taskId){
+async function fireNotification(title, body, tag, taskId, extra){
   if(!('Notification' in window) || Notification.permission!=='granted') return;
-  const opts={ body, tag, renotify:true, icon:APP_LOGO, badge:APP_LOGO,
-               data:{url: location.pathname, taskId: taskId||null},
-               actions:[ {action:'snooze', title:'Tunda 10 mnt'},
-                         {action:'done',   title:'Selesai'} ] };
+  const data={ url: location.pathname, taskId: taskId||null, ...(extra||{}) };
+  // Tombol aksi hanya relevan untuk notif satu task.
+  const actions = taskId
+    ? [ {action:'done', title:'✓ Selesai'}, {action:'snooze', title:'⏰ Tunda 1 jam'} ]
+    : [];
+  const opts={ body, tag, renotify:true, icon:APP_LOGO, badge:APP_LOGO, data, actions };
   try{
     if(navigator.serviceWorker){
       const reg=await navigator.serviceWorker.getRegistration();
@@ -3629,7 +3714,10 @@ async function fireNotification(title, body, tag, taskId){
   // Fallback: notifikasi langsung (tanpa action buttons); klik → fokus + buka task.
   try{
     const n=new Notification(title, opts);
-    n.onclick=()=>{ window.focus(); if(taskId){ try{ openModal(taskId); }catch(e){} } n.close(); };
+    n.onclick=()=>{ window.focus();
+      if(taskId){ try{ openModal(taskId); }catch(e){} }
+      else if(extra&&extra.smart){ try{ goSmart(extra.smart); }catch(e){} }
+      n.close(); };
   }catch(e){}
 }
 
@@ -3638,14 +3726,37 @@ async function fireNotification(title, body, tag, taskId){
 if('serviceWorker' in navigator){
   navigator.serviceWorker.addEventListener('message', ev=>{
     const d=ev.data||{};
-    if(d.type==='notif-action' && d.taskId){
-      const t=S.tasks.find(x=>x.id===d.taskId);
-      if(!t) return;
-      if(d.action==='snooze'){ snoozeTask(t.id, 10); }
-      else if(d.action==='done'){ if(!t.done) toggleDone(t.id); }
-      else { try{ openModal(t.id); }catch(e){} }
+    if(d.type==='notif-action'){
+      if(d.taskId){
+        const t=S.tasks.find(x=>x.id===d.taskId);
+        if(!t) return;
+        if(d.action==='snooze'){ snoozeTask(t.id, 60); }       // #10: tunda 1 jam
+        else if(d.action==='done'){ if(!t.done) toggleDone(t.id); }
+        else { try{ openModal(t.id); }catch(e){} }
+      } else if(d.smart){
+        try{ goSmart(d.smart); }catch(e){}
+      }
     }
   });
+}
+
+function notifCfg(){
+  const n = (S.ui && S.ui.notif) || {};
+  return {
+    enabled:  n.enabled!==false,
+    digest:   n.digest!==false,
+    digestHour: Number.isFinite(+n.digestHour) ? +n.digestHour : 7,
+    respectWorkHours: n.respectWorkHours!==false,
+    lastDigest: n.lastDigest || ''
+  };
+}
+/* True kalau saat ini berada di dalam jam kerja (atau batasan dimatikan). */
+function withinNotifHours(){
+  const cfg = notifCfg();
+  if(!cfg.respectWorkHours) return true;
+  const w = workHours();
+  const h = new Date().getHours();
+  return h >= w.start && h < w.end;
 }
 
 /* Waktu due sebuah task sebagai epoch ms (pakai jam bila ada, kalau tidak 09:00). */
@@ -3661,52 +3772,107 @@ function taskDueEpoch(t){
    - maksimal sekali per tugas per hari (kecuali setelah snooze). */
 function checkDeadlines(){
   if(!('Notification' in window) || Notification.permission!=='granted') return;
-  const td=todayISO();
-  const now=Date.now();
-  const notified=getNotified();
-  // buang catatan hari lampau supaya map tidak membengkak
+  const cfg = notifCfg();
+  if(!cfg.enabled) { refreshAppBadge(); return; }
+
+  const td  = todayISO();
+  const now = Date.now();
+
+  /* ---- #5 Ringkasan pagi: satu notif per hari pada jam yang diatur ---- */
+  maybeMorningDigest(td);
+
+  // Di luar jam kerja: jangan ganggu (kecuali batasan dimatikan). Badge tetap update.
+  if(!withinNotifHours()){ refreshAppBadge(); return; }
+
+  const notified = getNotified();
   for(const k of Object.keys(notified)){ if(notified[k]!==td) delete notified[k]; }
 
+  /* ---- #6 Kumpulkan due-today jadi SATU notifikasi ---- */
+  const dueTodayList = [];
+  /* Reminder meeting/berjam tetap per-task (butuh presisi waktu). */
   for(const t of S.tasks){
     if(t.done || !t.due) continue;
-    const key=t.id;
-
-    // Hormati snooze: belum waktunya → lewati.
     if(t.snoozeUntil && now < t.snoozeUntil) continue;
     const snoozeElapsed = t.snoozeUntil && now >= t.snoozeUntil;
 
-    // Sudah dinotif hari ini & tidak sedang keluar dari snooze → lewati.
-    if(notified[key]===td && !snoozeElapsed) continue;
+    const dueMs = taskDueEpoch(t);
+    const lead  = (+t.lead||0)*60000;
 
-    const dueMs=taskDueEpoch(t);
-    const lead=(+t.lead||0)*60000;
-    let fire=false, title='', body='';
+    // Task terlewat + due hari ini TANPA jam khusus → dikumpulkan.
+    const isTimed = t.time && /^\d\d:\d\d$/.test(t.time);
+    if(!isTimed && (t.due < td || t.due === td)){
+      if(notified[t.id]===td && !snoozeElapsed) continue;
+      dueTodayList.push(t);
+      notified[t.id]=td;
+      if(snoozeElapsed) t.snoozeUntil=null;
+      continue;
+    }
 
-    if(t.due<td){
-      fire=true; title='⏰ Task terlewat';
-      body=`"${t.title}" sudah lewat jatuh tempo (${fmtDate(t.due)}).`;
-    } else if(dueMs!=null){
-      // Muncul begitu (waktu due − lead) tercapai, hingga waktu due.
+    // Task berjam (mis. meeting): notif presisi lead-time, tetap per-task (#8-ready).
+    if(isTimed && dueMs!=null){
+      if(notified[t.id]===td && !snoozeElapsed) continue;
       const remindAt = dueMs - lead;
       if(now >= remindAt){
         const late = now >= dueMs;
-        title = late ? '📌 Jatuh tempo sekarang' : '🔔 Segera jatuh tempo';
-        const when = t.time ? (' jam '+t.time) : '';
-        body = late
-          ? `"${t.title}" jatuh tempo${when}.`
-          : `"${t.title}" jatuh tempo${when} (${t.lead>=1440?'besok':(t.lead>=60?Math.round(t.lead/60)+' jam lagi':t.lead+' menit lagi')}).`;
-        fire=true;
+        const title = late ? '📌 Jatuh tempo sekarang' : '🔔 Segera';
+        const body  = late
+          ? `"${t.title}" jam ${t.time}.`
+          : `"${t.title}" jam ${t.time} (${t.lead>=60?Math.round(t.lead/60)+' jam':(t.lead||0)+' menit'} lagi).`;
+        fireNotification(title, body, 'a31-'+t.id, t.id);
+        notified[t.id]=td;
+        if(snoozeElapsed) t.snoozeUntil=null;
       }
     }
-
-    if(fire){
-      fireNotification(title, body, 'a31-'+key, t.id);
-      notified[key]=td;
-      if(snoozeElapsed){ t.snoozeUntil=null; }   // reset snooze setelah dipicu
-    }
   }
+
+  // Kirim SATU notifikasi gabungan untuk semua due-today/terlewat.
+  if(dueTodayList.length===1){
+    const t=dueTodayList[0];
+    const late = t.due < td;
+    fireNotification(
+      late ? '⏰ Task terlewat' : '📌 Jatuh tempo hari ini',
+      `"${t.title}"${late?' ('+fmtDate(t.due)+')':''}.`,
+      'a31-due-today', t.id);
+  } else if(dueTodayList.length>1){
+    const titles = dueTodayList.slice(0,3).map(t=>t.title).join(' · ');
+    const rest = dueTodayList.length-3;
+    fireNotification(
+      `${dueTodayList.length} task jatuh tempo hari ini`,
+      titles + (rest>0?` · +${rest} lagi`:'') + '.',
+      'a31-due-today', null);
+  }
+
   setNotified(notified);
   refreshAppBadge();
+}
+
+/* ---- #5 Ringkasan pagi ---- */
+function maybeMorningDigest(td){
+  const cfg = notifCfg();
+  if(!cfg.digest) return;
+  if(cfg.lastDigest === td) return;           // sudah hari ini
+  const now = new Date();
+  if(now.getHours() < cfg.digestHour) return; // belum waktunya
+  // (Kalau app baru dibuka jam 9 padahal digestHour 7, tetap tampil sekarang.)
+
+  const tdIso = todayISO();
+  const active = S.tasks.filter(t=>!t.done);
+  const due   = active.filter(t=>t.due===tdIso).length;
+  const late  = active.filter(t=>t.due && t.due<tdIso).length;
+  const meet  = active.filter(t=>t.due===tdIso &&
+                (t.tags||[]).some(x=>String(x).toLowerCase()==='meeting')).length;
+
+  if(due+late+meet===0){                       // hari kosong → tetap catat agar tak dicek terus
+    S.ui.notif.lastDigest = td; save(); return;
+  }
+  const parts=[];
+  if(due)  parts.push(`${due} task jatuh tempo`);
+  if(meet) parts.push(`${meet} meeting`);
+  if(late) parts.push(`${late} terlambat`);
+  fireNotification('Selamat pagi 👋', 'Hari ini: ' + parts.join(' · ') + '.',
+                   'a31-digest', null, {smart:'today'});
+  S.ui.notif.lastDigest = td;
+  save();
 }
 
 /* Jalankan pengecekan sekarang + berkala tiap menit. */
@@ -3790,7 +3956,11 @@ window.addEventListener('appinstalled', ()=>{ const b=document.getElementById('i
 
 // Handle app-shortcut deep links (?smart=today, ?add=1)
 (function(){ const q=new URLSearchParams(location.search);
-  if(q.get('smart')) S.ui.smart=q.get('smart');
+  const sm=q.get('smart');
+  if(sm){ S.ui.smart=sm;
+    // Pastikan tampil di view papan supaya smart-list terlihat.
+    if(!['kanban','split'].includes(S.ui.view)) S.ui.view='kanban';
+  }
 })();
 </script>
 </body>

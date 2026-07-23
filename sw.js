@@ -3,7 +3,7 @@
    - Notification click / action handling (snooze, done, open)
    - Badge messages + skip-waiting support
 */
-const CACHE = 'a31-board-v4';
+const CACHE = 'a31-board-v5';
 const SHELL = ['./', './index.html', './manifest.json', './favicon.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -60,15 +60,19 @@ function focusAndSend(payload) {
     }
     // No open window → open the app; the page picks up the action on load.
     if (self.clients.openWindow) {
-      const url = payload.taskId ? ('./?task=' + payload.taskId) : './';
+      let url = './';
+      if (payload.taskId) url = './?task=' + payload.taskId;
+      else if (payload.smart) url = './?smart=' + payload.smart;
       return self.clients.openWindow(url);
     }
   });
 }
 
 self.addEventListener('notificationclick', (e) => {
-  const taskId = (e.notification.data && e.notification.data.taskId) || null;
+  const data = e.notification.data || {};
+  const taskId = data.taskId || null;
+  const smart = data.smart || null;
   const action = e.action || 'open';
   e.notification.close();
-  e.waitUntil(focusAndSend({ type: 'notif-action', action, taskId }));
+  e.waitUntil(focusAndSend({ type: 'notif-action', action, taskId, smart }));
 });
