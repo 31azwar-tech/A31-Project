@@ -601,6 +601,20 @@ input,select,textarea{font:inherit;color:inherit}
   padding:24px;background:radial-gradient(1200px 800px at 20% -10%,#EAF1FF,transparent),
   radial-gradient(1000px 700px at 110% 110%,#F6EDFF,transparent),var(--bg)}
 #auth-gate.hidden{display:none}
+/* Mode "booting": sesi lama terdeteksi, sembunyikan form login supaya tidak
+   berkedip. Yang tampil hanya logo + spinner sampai Firebase selesai cek sesi. */
+#auth-gate.booting .ag-form,
+#auth-gate.booting .ag-alt,
+#auth-gate.booting .ag-forgot,
+#auth-gate.booting .ag-status,
+#auth-gate.booting .ag-sub,
+#auth-gate.booting .ag-foot{display:none}
+#auth-gate.booting .ag-card{box-shadow:none;background:transparent}
+:root[data-theme="dark"] #auth-gate.booting .ag-card{background:transparent}
+#ag-boot{display:none;margin:18px auto 0;width:26px;height:26px;border-radius:50%;
+  border:3px solid rgba(59,130,246,.22);border-top-color:var(--blue);animation:agspin .8s linear infinite}
+#auth-gate.booting #ag-boot{display:block}
+@keyframes agspin{to{transform:rotate(360deg)}}
 .ag-card{background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(16,24,40,.14);
   padding:34px 30px;max-width:380px;width:100%;text-align:center}
 .ag-logo{width:72px;height:72px;border-radius:18px;margin:0 auto 16px;display:block;
@@ -814,6 +828,7 @@ optgroup{font-size:11px;color:var(--ink3)}
       </div>
       <button class="ag-primary" id="ag-btn">Sign in</button>
     </div>
+    <div id="ag-boot" aria-label="Memuat sesi"></div>
     <p id="ag-status" class="ag-status"></p>
     <p class="ag-alt">
       <span id="ag-alt-txt">Belum punya akun?</span>
@@ -1027,7 +1042,7 @@ const GROUP_ICON_SET = ['trophy','briefcase','home','target','star','rocket','bo
    Jangan pakai toISOString(): itu UTC dan bisa menggeser tanggal. */
 const ymd = (d) => { d = (d instanceof Date) ? d : new Date(d);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-const APP_VERSION = '2.4';
+const APP_VERSION = '2.5';
 const todayISO = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const addDays = (iso,n) => { const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n);
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
@@ -3490,14 +3505,28 @@ function isTypingNow(){
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closePopover(); closeFilter(); closeSnooze(); hideToast(); } });
 
 /* ---------- Auth gate + PWA init ---------- */
+/* Penanda sesi lokal: kalau perangkat ini pernah login dan belum logout,
+   kita anggap sesi masih ada sehingga form login tidak perlu berkedip. */
+const SESS_KEY = 'a31.hasSession';
+function hasSessionHint(){ try{ return localStorage.getItem(SESS_KEY)==='1'; }catch(e){ return false; } }
+function setSessionHint(v){ try{ v?localStorage.setItem(SESS_KEY,'1'):localStorage.removeItem(SESS_KEY); }catch(e){} }
+
 function showGate(msg, isErr){
-  const g=document.getElementById('auth-gate'); g.classList.remove('hidden');
+  const g=document.getElementById('auth-gate');
+  g.classList.remove('hidden'); g.classList.remove('booting');
   document.getElementById('app').style.display='none';
   const st=document.getElementById('ag-status');
   if(st){ st.textContent=msg||''; st.className='ag-status'+(isErr?' err':''); }
 }
+/* Tampilkan gate dalam mode splash (logo + spinner), tanpa form login. */
+function showGateBooting(){
+  const g=document.getElementById('auth-gate');
+  g.classList.remove('hidden'); g.classList.add('booting');
+  document.getElementById('app').style.display='none';
+}
 function hideGate(){
-  document.getElementById('auth-gate').classList.add('hidden');
+  const g=document.getElementById('auth-gate');
+  g.classList.add('hidden'); g.classList.remove('booting');
   document.getElementById('app').style.display='flex';
 }
 window.__onAuthError=(m)=>{ const b=document.getElementById('btn-google'); if(b) b.disabled=false;
@@ -3604,6 +3633,7 @@ function wireGate(){
 
 // Logout benar-benar keluar dari akun (bukan sekadar reload).
 window.__logout = ()=>{
+  try{ localStorage.removeItem('a31.hasSession'); }catch(e){}
   try{ if(window.__FB && window.__FB.logout) window.__FB.logout(); }catch(e){}
   setTimeout(()=>location.reload(), 150);
 };
@@ -3611,7 +3641,8 @@ window.__logout = ()=>{
 function bootAuth(){
   if(!S.ui.groupBy) S.ui.groupBy='status';
   wireGate();
-  showGate('');
+  // Kalau perangkat ini pernah login → tampilkan splash, bukan form login.
+  if(hasSessionHint()) showGateBooting(); else showGate('');
 
   window.__onDbError=(msg)=>{
     setSync('error');
@@ -3626,6 +3657,7 @@ function bootAuth(){
   window.__FB.watchAuth((user)=>{
     if(user){
       window.__USER = user;
+      setSessionHint(true);
       hideGate();
       if(!__authStarted){
         __authStarted = true;
@@ -3637,6 +3669,7 @@ function bootAuth(){
     } else {
       window.__USER = null;
       __authStarted = false;
+      setSessionHint(false);
       const b=document.getElementById('ag-btn'); if(b) b.disabled=false;
       showGate('');
       renderGate();
@@ -3645,9 +3678,20 @@ function bootAuth(){
 }
 
 // Tunggu modul Firebase selesai dimuat (script type=module berjalan setelah parse).
-(function waitFB(){
-  if(window.__FB_READY){ bootAuth(); return; }
-  setTimeout(waitFB, 40);
+(function(){
+  let waited = 0;
+  (function waitFB(){
+    if(window.__FB_READY){ bootAuth(); return; }
+    waited += 40;
+    // Jangan menggantung selamanya kalau SDK Firebase gagal dimuat (offline /
+    // CDN diblokir). Setelah 12 detik, tampilkan gate dengan pesan yang jelas.
+    if(waited >= 12000){
+      wireGate();
+      showGate('Gagal memuat Firebase — periksa koneksi lalu muat ulang halaman.', true);
+      return;
+    }
+    setTimeout(waitFB, 40);
+  })();
 })();
 
 /* ============================================================

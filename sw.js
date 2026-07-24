@@ -3,7 +3,7 @@
    - Notification click / action handling (snooze, done, open)
    - Badge messages + skip-waiting support
 */
-const CACHE = 'a31-board-v5';
+const CACHE = 'a31-board-v6';
 const SHELL = ['./', './index.html', './manifest.json', './favicon.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
